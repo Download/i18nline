@@ -1,5 +1,8 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var fs;
 
 var I18nliner = {
@@ -11,7 +14,6 @@ var I18nliner = {
     }
     return ignores;
   },
-
   set: function set(key, value, fn) {
     var prevValue = this.config[key];
     this.config[key] = value;
@@ -23,7 +25,6 @@ var I18nliner = {
       }
     }
   },
-
   loadConfig: function loadConfig() {
     fs = fs || require("fs");
     if (fs.existsSync(".i18nrc")) {
@@ -39,22 +40,22 @@ var I18nliner = {
       } catch (e) {}
     }
   },
-
   loadPlugins: function loadPlugins(plugins) {
-    plugins.forEach((function (pluginName) {
+    plugins.forEach(function (pluginName) {
       require(pluginName)({
         processors: this.Commands.Check.processors,
         config: this.config
       });
-    }).bind(this));
+    }.bind(this));
   },
 
+
   config: {
-    inferredKeyFormat: "underscored_crc32",
+    inferredKeyFormat: 'underscored_crc32',
     underscoredKeyLength: 50,
     basePath: ".",
     directories: []
   }
 };
 
-module.exports = I18nliner;
+exports.default = I18nliner;

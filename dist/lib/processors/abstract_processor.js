@@ -1,12 +1,20 @@
 "use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _gglobby = require("gglobby");
+
+var _gglobby2 = _interopRequireDefault(_gglobby);
+
+var _i18nliner = require("../i18nliner");
+
+var _i18nliner2 = _interopRequireDefault(_i18nliner);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* global process */
-
-var Globby = _interopRequire(require("gglobby"));
-
-var I18nliner = _interopRequire(require("../i18nliner"));
 
 function chdir(dir, cb) {
   var origDir = process.cwd();
@@ -35,14 +43,14 @@ AbstractProcessor.prototype.checkWrapper = function (file, checker) {
 
 AbstractProcessor.prototype.files = function (directory) {
   var pattern = this.pattern instanceof Array ? this.pattern : [this.pattern];
-  return chdir(directory, (function () {
-    var fileScope = Globby.select(pattern).reject(["/node_modules", "/bower_components"]).reject(I18nliner.ignore());
+  return chdir(directory, function () {
+    var fileScope = _gglobby2.default.select(pattern).reject(["/node_modules", "/bower_components"]).reject(_i18nliner2.default.ignore());
     if (this.only) {
       var only = this.only instanceof Array ? this.only : [this.only];
       fileScope = fileScope.select(only);
     }
     return fileScope.files;
-  }).bind(this));
+  }.bind(this));
 };
 
 AbstractProcessor.prototype.checkFiles = function () {
@@ -72,8 +80,8 @@ AbstractProcessor.prototype.checkFile = function (file) {
 
 AbstractProcessor.prototype.getDirectories = function () {
   if (this.directories) return this.directories;
-  if (I18nliner.config.directories.length) return I18nliner.config.directories;
-  return [I18nliner.config.basePath];
+  if (_i18nliner2.default.config.directories.length) return _i18nliner2.default.config.directories;
+  return [_i18nliner2.default.config.basePath];
 };
 
-module.exports = AbstractProcessor;
+exports.default = AbstractProcessor;

@@ -1,34 +1,46 @@
 "use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var fs = _interopRequire(require("fs"));
+var _fs = require("fs");
 
-var mkdirp = _interopRequire(require("mkdirp"));
+var _fs2 = _interopRequireDefault(_fs);
 
-var Check = _interopRequire(require("./check"));
+var _mkdirp = require("mkdirp");
 
-var I18nliner = _interopRequire(require("../../lib/i18nliner"));
+var _mkdirp2 = _interopRequireDefault(_mkdirp);
+
+var _check = require("./check");
+
+var _check2 = _interopRequireDefault(_check);
+
+var _i18nliner = require("../../lib/i18nliner");
+
+var _i18nliner2 = _interopRequireDefault(_i18nliner);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function Export(options) {
-  Check.call(this, options);
+  _check2.default.call(this, options);
 }
 
-Export.prototype = Object.create(Check.prototype);
+Export.prototype = Object.create(_check2.default.prototype);
 Export.prototype.constructor = Export;
 
 Export.prototype.run = function () {
-  var success = Check.prototype.run.call(this);
-  var locale = "en";
+  var success = _check2.default.prototype.run.call(this);
+  var locale = 'en';
   var translations = {};
   translations[locale] = this.translations.translations;
-  this.outputFile = I18nliner.config.basePath + "/" + (this.options.outputFile || "config/locales/generated/" + locale + ".json");
-  mkdirp.sync(this.outputFile.replace(/\/[^\/]+$/, ""));
+  this.outputFile = _i18nliner2.default.config.basePath + '/' + (this.options.outputFile || "config/locales/generated/" + locale + ".json");
+  _mkdirp2.default.sync(this.outputFile.replace(/\/[^\/]+$/, ''));
   if (success) {
-    fs.writeFileSync(this.outputFile, JSON.stringify(translations));
+    _fs2.default.writeFileSync(this.outputFile, JSON.stringify(translations));
     this.print("Wrote default translations to " + this.outputFile + "\n");
   }
   return success;
 };
 
-module.exports = Export;
+exports.default = Export;

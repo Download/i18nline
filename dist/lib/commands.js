@@ -1,12 +1,20 @@
 "use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _check = require("./commands/check");
+
+var _check2 = _interopRequireDefault(_check);
+
+var _export = require("./commands/export");
+
+var _export2 = _interopRequireDefault(_export);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* global process */
-
-var Check = _interopRequire(require("./commands/check"));
-
-var Export = _interopRequire(require("./commands/export"));
 
 var error = process.stderr.write.bind(process.stderr);
 
@@ -30,8 +38,8 @@ var Commands = {
     return false;
   },
 
-  Check: Check,
-  Export: Export
+  Check: _check2.default,
+  Export: _export2.default
 };
 
-module.exports = Commands;
+exports.default = Commands;

@@ -1,15 +1,18 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var htmlEntities = {
   "'": "&#39;",
   "&": "&amp;",
-  "\"": "&quot;",
+  '"': "&quot;",
   ">": "&gt;",
   "<": "&lt;"
 };
 
 function HtmlSafeString(string) {
-  this.string = typeof string === "string" ? string : "" + string;
+  this.string = typeof string === 'string' ? string : "" + string;
 }
 HtmlSafeString.prototype.toString = function () {
   return this.string;
@@ -26,38 +29,25 @@ var Utils = {
     return result;
   },
 
-  keys: (function (_keys) {
-    var _keysWrapper = function keys(_x) {
-      return _keys.apply(this, arguments);
-    };
-
-    _keysWrapper.toString = function () {
-      return _keys.toString();
-    };
-
-    return _keysWrapper;
-  })(function (object) {
+  keys: function keys(object) {
     var keys = [];
     for (var key in object) {
       if (object.hasOwnProperty(key)) keys.push(key);
     }
     return keys;
-  }),
+  },
 
   htmlEscape: function htmlEscape(string) {
-    if (typeof string === "undefined" || string === null) {
-      return "";
-    }if (string instanceof Utils.HtmlSafeString) {
-      return string.toString();
-    }return String(string).replace(/[&<>"']/g, function (m) {
+    if (typeof string === 'undefined' || string === null) return '';
+    if (string instanceof Utils.HtmlSafeString) return string.toString();
+    return String(string).replace(/[&<>"']/g, function (m) {
       return htmlEntities[m];
     });
   },
 
   regexpEscape: function regexpEscape(string) {
-    if (typeof string === "undefined" || string === null) {
-      return "";
-    }return String(string).replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+    if (typeof string === 'undefined' || string === null) return '';
+    return String(string).replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
   },
 
   extend: function extend() {
@@ -72,4 +62,4 @@ var Utils = {
   }
 };
 
-module.exports = Utils;
+exports.default = Utils;

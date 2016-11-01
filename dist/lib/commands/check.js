@@ -1,17 +1,29 @@
 "use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var clc = _interopRequire(require("cli-color"));
+var _cliColor = require("cli-color");
 
-var TranslationHash = _interopRequire(require("../extractors/translation_hash"));
+var _cliColor2 = _interopRequireDefault(_cliColor);
 
-var GenericCommand = _interopRequire(require("./generic_command"));
+var _translation_hash = require("../extractors/translation_hash");
 
-var JsProcessor = _interopRequire(require("../processors/js_processor"));
+var _translation_hash2 = _interopRequireDefault(_translation_hash);
 
-var red = clc.red;
-var green = clc.green;
+var _generic_command = require("./generic_command");
+
+var _generic_command2 = _interopRequireDefault(_generic_command);
+
+var _js_processor = require("../processors/js_processor");
+
+var _js_processor2 = _interopRequireDefault(_js_processor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var red = _cliColor2.default.red;
+var green = _cliColor2.default.green;
 
 function sum(array, prop) {
   var total = 0;
@@ -22,16 +34,16 @@ function sum(array, prop) {
 }
 
 function Check(options) {
-  GenericCommand.call(this, options);
+  _generic_command2.default.call(this, options);
   this.errors = [];
   this.translations = new this.TranslationHash();
   this.setUpProcessors();
 }
 
-Check.prototype = Object.create(GenericCommand.prototype);
+Check.prototype = Object.create(_generic_command2.default.prototype);
 Check.prototype.constructor = Check;
 
-Check.prototype.TranslationHash = TranslationHash;
+Check.prototype.TranslationHash = _translation_hash2.default;
 
 Check.prototype.setUpProcessors = function () {
   this.processors = [];
@@ -40,6 +52,7 @@ Check.prototype.setUpProcessors = function () {
     this.processors.push(new Processor(this.translations, {
       translations: this.translations,
       checkWrapper: this.checkWrapper.bind(this),
+      pattern: this.options.pattern,
       only: this.options.only,
       directory: this.options.directory
     }));
@@ -73,8 +86,8 @@ Check.prototype.printSummary = function () {
   var errorsLen = errors.length;
   var i;
 
-  var translationCount = sum(processors, "translationCount");
-  var fileCount = sum(processors, "fileCount");
+  var translationCount = sum(processors, 'translationCount');
+  var fileCount = sum(processors, 'fileCount');
   var elapsed = new Date().getTime() - this.startTime;
 
   this.print("\n\n");
@@ -94,6 +107,6 @@ Check.prototype.run = function () {
   return this.isSuccess();
 };
 
-Check.processors = { JsProcessor: JsProcessor };
+Check.processors = { JsProcessor: _js_processor2.default };
 
-module.exports = Check;
+exports.default = Check;

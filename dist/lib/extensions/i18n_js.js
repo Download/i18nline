@@ -1,13 +1,21 @@
-"use strict";
+'use strict';
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var CallHelpers = _interopRequire(require("../call_helpers"));
+var _call_helpers = require('../call_helpers');
 
-var Utils = _interopRequire(require("../utils"));
+var _call_helpers2 = _interopRequireDefault(_call_helpers);
+
+var _utils = require('../utils');
+
+var _utils2 = _interopRequireDefault(_utils);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var extend = function extend(I18n) {
-  var htmlEscape = Utils.htmlEscape;
+  var htmlEscape = _utils2.default.htmlEscape;
 
   I18n.interpolateWithoutHtmlSafety = I18n.interpolate;
   I18n.interpolate = function (message, options) {
@@ -23,7 +31,7 @@ var extend = function extend(I18n) {
     if (wrappers) {
       needsEscaping = true;
       message = htmlEscape(message);
-      message = CallHelpers.applyWrappers(message, wrappers);
+      message = _call_helpers2.default.applyWrappers(message, wrappers);
     }
 
     for (i = 0; i < len; i++) {
@@ -31,8 +39,8 @@ var extend = function extend(I18n) {
       key = match.replace(this.PLACEHOLDER, "$1");
       keys.push(key);
       if (!(key in options)) continue;
-      if (match[1] === "h") options[key] = new Utils.HtmlSafeString(options[key]);
-      if (options[key] instanceof Utils.HtmlSafeString) needsEscaping = true;
+      if (match[1] === 'h') options[key] = new _utils2.default.HtmlSafeString(options[key]);
+      if (options[key] instanceof _utils2.default.HtmlSafeString) needsEscaping = true;
     }
 
     if (needsEscaping) {
@@ -44,27 +52,27 @@ var extend = function extend(I18n) {
       }
     }
     message = this.interpolateWithoutHtmlSafety(message, options);
-    return needsEscaping ? new Utils.HtmlSafeString(message) : message;
+    return needsEscaping ? new _utils2.default.HtmlSafeString(message) : message;
   };
 
   // add html-safety hint, i.e. "%h{...}"
   I18n.PLACEHOLDER = /(?:\{\{|%h?\{)(.*?)(?:\}\}?)/gm;
 
-  I18n.CallHelpers = CallHelpers;
-  I18n.Utils = Utils;
+  I18n.CallHelpers = _call_helpers2.default;
+  I18n.Utils = _utils2.default;
 
   I18n.translateWithoutI18nliner = I18n.translate;
   I18n.translate = function () {
-    var args = CallHelpers.inferArguments([].slice.call(arguments));
+    var args = _call_helpers2.default.inferArguments([].slice.call(arguments));
     var key = args[0];
     var options = args[1];
-    key = CallHelpers.normalizeKey(key, options);
+    key = _call_helpers2.default.normalizeKey(key, options);
     var defaultValue = options.defaultValue;
-    if (defaultValue) options.defaultValue = CallHelpers.normalizeDefault(defaultValue, options);
+    if (defaultValue) options.defaultValue = _call_helpers2.default.normalizeDefault(defaultValue, options);
 
     return this.translateWithoutI18nliner(key, options);
   };
   I18n.t = I18n.translate;
 };
 
-module.exports = extend;
+exports.default = extend;

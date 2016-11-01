@@ -1,8 +1,14 @@
 "use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var CallHelpers = _interopRequire(require("./call_helpers"));
+var _call_helpers = require("./call_helpers");
+
+var _call_helpers2 = _interopRequireDefault(_call_helpers);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function wordify(string) {
   return string.replace(/[A-Z]/g, function (s) {
@@ -20,10 +26,10 @@ var Errors = {
         if (typeof details === "string" || !details.length) details = [details];
         for (var i = 0; i < details.length; i++) {
           part = details[i];
-          part = part === CallHelpers.UNSUPPORTED_EXPRESSION ? "<unsupported expression>" : JSON.stringify(part);
+          part = part === _call_helpers2.default.UNSUPPORTED_EXPRESSION ? "<unsupported expression>" : JSON.stringify(part);
           parts.push(part);
         }
-        details = parts.join(", ");
+        details = parts.join(', ');
       }
       this.name = name;
       this.message = wordify(name) + " on line " + line + (details ? ": " + details : "");
@@ -31,14 +37,14 @@ var Errors = {
   }
 };
 
-Errors.register("InvalidSignature");
-Errors.register("InvalidPluralizationKey");
-Errors.register("MissingPluralizationKey");
-Errors.register("InvalidPluralizationDefault");
-Errors.register("MissingInterpolationValue");
-Errors.register("MissingCountValue");
-Errors.register("InvalidOptionKey");
-Errors.register("KeyAsScope");
-Errors.register("KeyInUse");
+Errors.register('InvalidSignature');
+Errors.register('InvalidPluralizationKey');
+Errors.register('MissingPluralizationKey');
+Errors.register('InvalidPluralizationDefault');
+Errors.register('MissingInterpolationValue');
+Errors.register('MissingCountValue');
+Errors.register('InvalidOptionKey');
+Errors.register('KeyAsScope');
+Errors.register('KeyInUse');
 
-module.exports = Errors;
+exports.default = Errors;

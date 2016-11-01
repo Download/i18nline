@@ -1,6 +1,9 @@
-/* global process */
-
 "use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/* global process */
 
 function GenericCommand(options) {
   this.options = options;
@@ -13,4 +16,4 @@ GenericCommand.prototype.print = function (string) {
   process.stdout.write(string);
 };
 
-module.exports = GenericCommand;
+exports.default = GenericCommand;

@@ -1,25 +1,41 @@
 "use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var recast = _interopRequire(require("recast"));
+var _recast = require("recast");
 
-var TranslateCall = _interopRequire(require("./translate_call"));
+var _recast2 = _interopRequireDefault(_recast);
 
-var Utils = _interopRequire(require("../utils"));
+var _translate_call = require("./translate_call");
 
-var CallHelpers = _interopRequire(require("../call_helpers"));
+var _translate_call2 = _interopRequireDefault(_translate_call);
 
-var TranslationHash = _interopRequire(require("./translation_hash"));
+var _utils = require("../utils");
 
-var I18nliner = _interopRequire(require("../i18nliner"));
+var _utils2 = _interopRequireDefault(_utils);
+
+var _call_helpers = require("../call_helpers");
+
+var _call_helpers2 = _interopRequireDefault(_call_helpers);
+
+var _translation_hash = require("./translation_hash");
+
+var _translation_hash2 = _interopRequireDefault(_translation_hash);
+
+var _i18nliner = require("../i18nliner");
+
+var _i18nliner2 = _interopRequireDefault(_i18nliner);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function I18nJsExtractor(options) {
   this.source = options.source;
   this.ast = options.ast;
 }
 
-Utils.extend(I18nJsExtractor.prototype, CallHelpers);
+_utils2.default.extend(I18nJsExtractor.prototype, _call_helpers2.default);
 
 I18nJsExtractor.prototype.forEach = function (handler) {
   this.handler = handler;
@@ -29,13 +45,13 @@ I18nJsExtractor.prototype.forEach = function (handler) {
 
 I18nJsExtractor.prototype.run = function () {
   if (!this.handler) {
-    this.translations = new TranslationHash();
+    this.translations = new _translation_hash2.default();
     this.handler = this.translations.set.bind(this.translations);
   }
 
-  var ast = this.ast || recast.parse(this.source, I18nliner.config.recastOptions);
+  var ast = this.ast || _recast2.default.parse(this.source, _i18nliner2.default.config.recastOptions);
   var self = this;
-  recast.visit(ast, {
+  _recast2.default.visit(ast, {
     visitCallExpression: function visitCallExpression(path) {
       self.processCall(path.value, this.traverse.bind(this, path));
     }
@@ -81,13 +97,15 @@ I18nJsExtractor.prototype.evaluateExpression = function (node, identifierToStrin
 };
 
 I18nJsExtractor.prototype.buildTranslateCall = function (line, method, args) {
-  return new TranslateCall(line, method, args);
+  return new _translate_call2.default(line, method, args);
 };
 
 I18nJsExtractor.prototype.processTranslateCall = function (line, receiver, method, args) {
   var call = this.buildTranslateCall(line, method, args);
   var translations = call.translations();
-  for (var i = 0, len = translations.length; i < len; i++) this.handler(translations[i][0], translations[i][1], call);
+  for (var i = 0, len = translations.length; i < len; i++) {
+    this.handler(translations[i][0], translations[i][1], call);
+  }
 };
 
 I18nJsExtractor.prototype.objectFrom = function (node) {
@@ -98,7 +116,7 @@ I18nJsExtractor.prototype.objectFrom = function (node) {
   for (var i = 0, len = props.length; i < len; i++) {
     prop = props[i];
     key = this.evaluateExpression(prop.key, true);
-    if (typeof key !== "string") return this.UNSUPPORTED_EXPRESSION;
+    if (typeof key !== 'string') return this.UNSUPPORTED_EXPRESSION;
     object[key] = this.evaluateExpression(prop.value);
   }
   return object;
@@ -111,4 +129,4 @@ I18nJsExtractor.prototype.stringFromConcatenation = function (node) {
   return left + right;
 };
 
-module.exports = I18nJsExtractor;
+exports.default = I18nJsExtractor;

@@ -1,23 +1,31 @@
-"use strict";
+'use strict';
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var Errors = _interopRequire(require("../errors"));
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _errors = require('../errors');
+
+var _errors2 = _interopRequireDefault(_errors);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function TranslationHash() {
   this.translations = {};
 }
 
 TranslationHash.prototype.set = function (key, value, meta) {
-  var parts = key.split(".");
+  var parts = key.split('.');
   var context = this.getScope(parts.slice(0, -1), meta);
   var finalKey = parts[parts.length - 1];
 
   if (context[finalKey]) {
-    if (typeof context[finalKey] === "object") {
-      throw new Errors.KeyAsScope(meta.line, key);
+    if (_typeof(context[finalKey]) === 'object') {
+      throw new _errors2.default.KeyAsScope(meta.line, key);
     } else if (context[finalKey] !== value) {
-      throw new Errors.KeyInUse(meta.line, key);
+      throw new _errors2.default.KeyInUse(meta.line, key);
     }
   }
   context[finalKey] = value;
@@ -31,12 +39,12 @@ TranslationHash.prototype.getScope = function (parts, meta) {
 
   for (i = 0; i < partsLen; i++) {
     key = parts[i];
-    if (typeof context[key] === "string") {
-      throw new Errors.KeyAsScope(meta.line, parts.slice(0, i + 1).join("."));
+    if (typeof context[key] === 'string') {
+      throw new _errors2.default.KeyAsScope(meta.line, parts.slice(0, i + 1).join("."));
     }
     context = context[key] || (context[key] = {});
   }
   return context;
 };
 
-module.exports = TranslationHash;
+exports.default = TranslationHash;
