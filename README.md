@@ -1,10 +1,10 @@
 # i18nline
 ### Keep your translations in line
 
-[![npm](https://img.shields.io/npm/v/ulog.svg)](https://npmjs.com/package/ulog)
-[![license](https://img.shields.io/npm/l/ulog.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![travis](https://img.shields.io/travis/Download/ulog.svg)](https://travis-ci.org/Download/ulog)
-[![greenkeeper](https://img.shields.io/david/Download/ulog.svg)](https://greenkeeper.io/)
+[![npm](https://img.shields.io/npm/v/i18nline.svg)](https://npmjs.com/package/i18nline)
+[![license](https://img.shields.io/npm/l/i18nline.svg)](https://github.com/download/i18nline/LICENSE)
+[![travis](https://img.shields.io/travis/Download/i18nline.svg)](https://travis-ci.org/Download/i18nline)
+[![greenkeeper](https://img.shields.io/david/Download/i18nline.svg)](https://greenkeeper.io/)
 ![mind BLOWN](https://img.shields.io/badge/mind-BLOWN-ff69b4.svg)
 
 
@@ -45,9 +45,9 @@ i18nline will do it for you.
 
 ## What is this?
 
-This project is a fork of Jon Jensen's [i18nline-js](https://github.com/jenseng/i18nline-js) 
+This project is a fork of Jon Jensen's [i18nline-js](https://github.com/jenseng/i18nline-js)
 that applies some long open PR, adds some logging (powered by [ulog](https://npmjs.com/package/ulog)),
-a help screen for the CLI and some auto-config. I'm hoping any changes I make in this fork will 
+a help screen for the CLI and some auto-config. I'm hoping any changes I make in this fork will
 eventually be merged back into the main project but for now I need these changes.
 
 ## Installation
@@ -302,5 +302,5 @@ translation calls, keys and translation files will still just work without modif
 
 ## License
 
-Copyright (c) 2016 Stijn de Witt && Jon Jensen, 
+Copyright (c) 2016 Stijn de Witt & Jon Jensen,
 released under the MIT license

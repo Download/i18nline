@@ -11,7 +11,7 @@
   "bin": {
     "i18nline": "./bin/i18nline.js"
   },
-  "author": "Stijn de Witt && Jon Jensen",
+  "author": "Stijn de Witt & Jon Jensen",
   "license": "MIT",
   "homepage": "https://github.com/download/i18nline",
   "repository": {
