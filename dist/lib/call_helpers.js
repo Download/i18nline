@@ -14,9 +14,9 @@ var _utils = require('./utils');
 
 var _utils2 = _interopRequireDefault(_utils);
 
-var _i18nliner = require('./i18nliner');
+var _i18nline = require('./i18nline');
 
-var _i18nliner2 = _interopRequireDefault(_i18nliner);
+var _i18nline2 = _interopRequireDefault(_i18nline);
 
 var _speakingurl = require('speakingurl');
 
@@ -69,7 +69,7 @@ var CallHelpers = {
 
   keyifyUnderscored: function keyifyUnderscored(string) {
     var key = (0, _speakingurl2.default)(string, { separator: '_', lang: false }).replace(/[-_]+/g, '_');
-    return key.substring(0, _i18nliner2.default.config.underscoredKeyLength);
+    return key.substring(0, _i18nline2.default.config.underscoredKeyLength);
   },
 
   keyifyUnderscoredCrc32: function keyifyUnderscoredCrc32(string) {
@@ -78,7 +78,7 @@ var CallHelpers = {
   },
 
   keyify: function keyify(string) {
-    switch (_i18nliner2.default.config.inferredKeyFormat) {
+    switch (_i18nline2.default.config.inferredKeyFormat) {
       case 'underscored':
         return this.keyifyUnderscored(string);
       case 'underscored_crc32':

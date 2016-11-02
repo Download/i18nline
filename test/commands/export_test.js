@@ -1,7 +1,7 @@
 /* global describe, it */
 
 import Export from '../../lib/commands/export';
-import I18nliner from '../../lib/i18nliner';
+import I18nline from '../../lib/i18nline';
 import {assert} from "chai";
 import fs from "fs";
 import temp from "temp";
@@ -11,7 +11,7 @@ describe('Export', function() {
   describe(".run", function() {
     it("should dump translations in utf8", function() {
       var tmpDir = temp.mkdirSync();
-      I18nliner.set('basePath', tmpDir, function() {
+      I18nline.set('basePath', tmpDir, function() {
         var exporter = new Export({silent: true});
         exporter.checkFiles = function() {
           this.translations = {translations: {i18n: "Iñtërnâtiônàlizætiøn"}};

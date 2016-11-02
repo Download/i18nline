@@ -27,14 +27,24 @@ JsProcessor.prototype.constructor = JsProcessor;
 JsProcessor.prototype.defaultPattern = "**/*.js";
 JsProcessor.prototype.I18nJsExtractor = _i18n_js_extractor2.default;
 
-JsProcessor.prototype.checkContents = function (source) {
+JsProcessor.prototype.checkContents = function (source, name) {
   var fileData = this.preProcess(source);
-  if (fileData.skip) return;
+  if (fileData.skip) {
+    this.log.debug(this.log.name + ': skipping ' + name);
+    return;
+  }
+  this.log.debug(this.log.name + ': processing ' + name);
   var extractor = new this.I18nJsExtractor(fileData);
+  var found = 0;
   extractor.forEach(function (key, value, meta) {
     this.translations.set(key, value, meta);
     this.translationCount++;
+    found++;
   }.bind(this));
+  if (found) {
+    this.log.debug(this.log.name + ': found ' + found + ' translation' + (found != 1 ? 's' : ''));
+  }
+  return found;
 };
 
 JsProcessor.prototype.sourceFor = function (file) {

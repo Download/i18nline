@@ -1,4 +1,7 @@
 before_script: 'npm install -g grunt-cli'
 language: node_js
 node_js:
+  - "node"
+  - "4"
   - "0.10"
+  - "iojs"

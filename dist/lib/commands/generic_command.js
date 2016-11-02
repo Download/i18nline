@@ -1,19 +1,26 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-/* global process */
+
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _utils = require('../utils');
+
+var _utils2 = _interopRequireDefault(_utils);
+
+var _i18nline = require('../i18nline');
+
+var _i18nline2 = _interopRequireDefault(_i18nline);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function GenericCommand(options) {
   this.options = options;
-  if (this.options.silent) {
-    this.print = function () {};
-  }
+  this.log = _utils2.default.createLogger('i18nline:' + this.constructor.name, options.silent || options.s);
 }
-
-GenericCommand.prototype.print = function (string) {
-  process.stdout.write(string);
-};
 
 exports.default = GenericCommand;

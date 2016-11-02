@@ -2,7 +2,7 @@
 import {assert} from "chai";
 import TranslateCall from "../../lib/extractors/translate_call";
 import Errors from "../../lib/errors";
-import I18nliner from "../../lib/i18nliner";
+import I18nline from "../../lib/i18nline";
 
 describe("TranslateCall", function() {
   function call() {
@@ -53,7 +53,7 @@ describe("TranslateCall", function() {
 
   describe("key inference", function() {
     it("should generate literal keys", function() {
-      I18nliner.set('inferredKeyFormat', 'literal', function() {
+      I18nline.set('inferredKeyFormat', 'literal', function() {
         assert.deepEqual(
           call("zomg key").translations(),
           [["zomg key", "zomg key"]]
@@ -62,7 +62,7 @@ describe("TranslateCall", function() {
     });
 
     it("should generate underscored keys", function() {
-      I18nliner.set('inferredKeyFormat', 'underscored', function() {
+      I18nline.set('inferredKeyFormat', 'underscored', function() {
         assert.deepEqual(
           call("zOmg -- key!!").translations(),
           [["zomg_key", "zOmg -- key!!"]]
@@ -73,7 +73,7 @@ describe("TranslateCall", function() {
     it("should truncate long keys", function() {
       var longString = new Array(100).join("trolololo");
 
-      I18nliner.set('inferredKeyFormat', 'underscored', function() {
+      I18nline.set('inferredKeyFormat', 'underscored', function() {
         assert(
           call(longString).translations()[0][0].length < 100
         );
@@ -81,7 +81,7 @@ describe("TranslateCall", function() {
     });
 
     it("should generate underscored + crc32 keys", function() {
-      I18nliner.set('inferredKeyFormat', 'underscored_crc32', function() {
+      I18nline.set('inferredKeyFormat', 'underscored_crc32', function() {
         assert.deepEqual(
           call("zOmg key!!").translations(),
           [["zomg_key_90a85b0b", "zOmg key!!"]]

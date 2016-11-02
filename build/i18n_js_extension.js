@@ -743,13 +743,25 @@ module.exports = require('./lib/');
         'fr': {
             '∆': 'delta',
             '∞': 'infiniment',
-            '♥': 'Amour',
+            '♥': 'amour',
             '&': 'et',
             '|': 'ou',
             '<': 'moins que',
             '>': 'superieure a',
             '∑': 'somme des',
             '¤': 'monnaie'
+        },
+
+        'nl': {
+            '∆': 'delta',
+            '∞': 'oneindig',
+            '♥': 'liefde',
+            '&': 'en',
+            '|': 'of',
+            '<': 'kleiner dan',
+            '>': 'groter dan',
+            '∑': 'som van',
+            '¤': 'valuta'
         },
 
         'pt': {
@@ -808,7 +820,7 @@ module.exports = require('./lib/');
 "use strict";
 var pluralize = require("./pluralize")["default"] || require("./pluralize");
 var Utils = require("./utils")["default"] || require("./utils");
-var I18nliner = require("./i18nliner")["default"] || require("./i18nliner");
+var I18nline = require("./i18nline")["default"] || require("./i18nline");
 var getSlug = require("speakingurl")["default"] || require("speakingurl");
 var crc32 = require("crc32")["default"] || require("crc32");
 
@@ -857,7 +869,7 @@ var CallHelpers = {
 
   keyifyUnderscored: function(string) {
     var key = getSlug(string, {separator: '_', lang: false}).replace(/[-_]+/g, '_');
-    return key.substring(0, I18nliner.underscoredKeyLength);
+    return key.substring(0, I18nline.underscoredKeyLength);
   },
 
   keyifyUnderscoredCrc32: function(string) {
@@ -866,7 +878,7 @@ var CallHelpers = {
   },
 
   keyify: function(string) {
-    switch (I18nliner.inferredKeyFormat) {
+    switch (I18nline.inferredKeyFormat) {
       case 'underscored':
         return this.keyifyUnderscored(string);
       case 'underscored_crc32':
@@ -958,7 +970,7 @@ var CallHelpers = {
 };
 
 exports["default"] = CallHelpers;
-},{"./i18nliner":8,"./pluralize":9,"./utils":10,"crc32":1,"speakingurl":3}],6:[function(require,module,exports){
+},{"./i18nline":8,"./pluralize":9,"./utils":10,"crc32":1,"speakingurl":3}],6:[function(require,module,exports){
 "use strict";
 var CallHelpers = require("../call_helpers")["default"] || require("../call_helpers");
 var Utils = require("../utils")["default"] || require("../utils");
@@ -1013,7 +1025,7 @@ var extend = function(I18n) {
   I18n.CallHelpers = CallHelpers;
   I18n.Utils = Utils;
 
-  I18n.translateWithoutI18nliner = I18n.translate;
+  I18n.translateWithoutI18nline = I18n.translate;
   I18n.translate = function() {
     var args = CallHelpers.inferArguments([].slice.call(arguments));
     var key = args[0];
@@ -1023,7 +1035,7 @@ var extend = function(I18n) {
     if (defaultValue)
       options.defaultValue = CallHelpers.normalizeDefault(defaultValue, options);
 
-    return this.translateWithoutI18nliner(key, options);
+    return this.translateWithoutI18nline(key, options);
   };
   I18n.t = I18n.translate;
 };
@@ -1038,7 +1050,7 @@ extend(I18n);
 "use strict";
 var fs = require("fs")["default"] || require("fs");
 
-var I18nliner = {
+var I18nline = {
   ignore: function() {
     var ignores = [];
     if (fs.existsSync(".i18nignore")) {
@@ -1062,7 +1074,7 @@ var I18nliner = {
   underscoredKeyLength: 50,
   basePath: "."
 };
-exports["default"] = I18nliner;
+exports["default"] = I18nline;
 },{"fs":2}],9:[function(require,module,exports){
 "use strict";
 // ported pluralizations from active_support/inflections.rb

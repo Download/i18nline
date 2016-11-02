@@ -4,9 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _i18nliner = require('./i18nliner');
+var _i18nline = require('./i18nline');
 
-var _i18nliner2 = _interopRequireDefault(_i18nliner);
+var _i18nline2 = _interopRequireDefault(_i18nline);
 
 var _call_helpers = require('./call_helpers');
 
@@ -30,12 +30,12 @@ var _commands2 = _interopRequireDefault(_commands);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_i18nliner2.default.CallHelpers = _call_helpers2.default;
-_i18nliner2.default.Errors = _errors2.default;
-_i18nliner2.default.TranslateCall = _translate_call2.default;
-_i18nliner2.default.TranslationHash = _translation_hash2.default;
-_i18nliner2.default.Commands = _commands2.default;
+_i18nline2.default.CallHelpers = _call_helpers2.default;
+_i18nline2.default.Errors = _errors2.default;
+_i18nline2.default.TranslateCall = _translate_call2.default;
+_i18nline2.default.TranslationHash = _translation_hash2.default;
+_i18nline2.default.Commands = _commands2.default;
 
-_i18nliner2.default.loadConfig();
+_i18nline2.default.loadConfig();
 
-exports.default = _i18nliner2.default;
+exports.default = _i18nline2.default;

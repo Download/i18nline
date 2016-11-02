@@ -16,9 +16,9 @@ var _check = require("./check");
 
 var _check2 = _interopRequireDefault(_check);
 
-var _i18nliner = require("../../lib/i18nliner");
+var _i18nline = require("../../lib/i18nline");
 
-var _i18nliner2 = _interopRequireDefault(_i18nliner);
+var _i18nline2 = _interopRequireDefault(_i18nline);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30,15 +30,16 @@ Export.prototype = Object.create(_check2.default.prototype);
 Export.prototype.constructor = Export;
 
 Export.prototype.run = function () {
+  this.log.log(this.log.name + ': export', this.options);
   var success = _check2.default.prototype.run.call(this);
   var locale = 'en';
   var translations = {};
   translations[locale] = this.translations.translations;
-  this.outputFile = _i18nliner2.default.config.basePath + '/' + (this.options.outputFile || "config/locales/generated/" + locale + ".json");
+  this.outputFile = _i18nline2.default.config.basePath + '/' + (this.options.outputFile || "config/locales/generated/" + locale + ".json");
   _mkdirp2.default.sync(this.outputFile.replace(/\/[^\/]+$/, ''));
   if (success) {
     _fs2.default.writeFileSync(this.outputFile, JSON.stringify(translations));
-    this.print("Wrote default translations to " + this.outputFile + "\n");
+    this.log.info("Wrote default translations to " + this.outputFile + "\n");
   }
   return success;
 };

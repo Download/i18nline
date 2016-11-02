@@ -24,9 +24,9 @@ var _translation_hash = require("./translation_hash");
 
 var _translation_hash2 = _interopRequireDefault(_translation_hash);
 
-var _i18nliner = require("../i18nliner");
+var _i18nline = require("../i18nline");
 
-var _i18nliner2 = _interopRequireDefault(_i18nliner);
+var _i18nline2 = _interopRequireDefault(_i18nline);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -49,7 +49,7 @@ I18nJsExtractor.prototype.run = function () {
     this.handler = this.translations.set.bind(this.translations);
   }
 
-  var ast = this.ast || _recast2.default.parse(this.source, _i18nliner2.default.config.recastOptions);
+  var ast = this.ast || _recast2.default.parse(this.source, _i18nline2.default.config.recastOptions);
   var self = this;
   _recast2.default.visit(ast, {
     visitCallExpression: function visitCallExpression(path) {

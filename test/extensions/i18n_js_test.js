@@ -31,7 +31,7 @@ describe("I18nJs extension", function() {
 
   describe("translate", function() {
     it("should should normalize the arguments passed into the original translate", function() {
-      var spy = sinon.spy(I18n, "translateWithoutI18nliner");
+      var spy = sinon.spy(I18n, "translateWithoutI18nline");
       assert.equal(
         I18n.translate("Hello %{name}", {name: "bob"}),
         "Hello bob"
@@ -44,7 +44,7 @@ describe("I18nJs extension", function() {
     });
 
     it("should infer pluralization objects", function() {
-      var spy = sinon.spy(I18n, "translateWithoutI18nliner");
+      var spy = sinon.spy(I18n, "translateWithoutI18nline");
       I18n.translate("light", {count: 1});
       assert.deepEqual(
         ["count_lights_58339e29", {defaultValue: {one: "1 light", other: "%{count} lights"}, count: 1}],

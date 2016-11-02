@@ -52,8 +52,10 @@ Check.prototype.setUpProcessors = function () {
     this.processors.push(new Processor(this.translations, {
       translations: this.translations,
       checkWrapper: this.checkWrapper.bind(this),
+      patterns: this.options.patterns,
       pattern: this.options.pattern,
       only: this.options.only,
+      directories: this.options.directories,
       directory: this.options.directory
     }));
   }
@@ -67,11 +69,17 @@ Check.prototype.checkFiles = function () {
 
 Check.prototype.checkWrapper = function (file, checker) {
   try {
-    checker(file);
-    this.print(green("."));
+    var found = checker(file);
+    if (found) {
+      this.log.info(green("+" + found));
+    } else {
+      this.log.info(".");
+    }
+    return found;
   } catch (e) {
     this.errors.push(e.message + "\n" + file);
-    this.print(red("F"));
+    this.log.error(red("ERR" + this.errors.length));
+    return 0;
   }
 };
 
@@ -90,18 +98,25 @@ Check.prototype.printSummary = function () {
   var fileCount = sum(processors, 'fileCount');
   var elapsed = new Date().getTime() - this.startTime;
 
-  this.print("\n\n");
+  this.log.info("\n\n");
 
   for (i = 0; i < errorsLen; i++) {
-    this.print(i + 1 + ")\n" + red(errors[i]) + "\n\n");
+    this.log.error("ERR" + (i + 1) + ")\n" + red(errors[i]) + "\n\n");
   }
-  this.print("Finished in " + elapsed / 1000 + " seconds\n\n");
+  this.log.info("Finished in " + elapsed / 1000 + " seconds\n\n");
   summary = fileCount + " files, " + translationCount + " strings, " + errorsLen + " failures";
-  this.print((this.isSuccess() ? green : red)(summary) + "\n");
+  if (this.isSuccess()) {
+    this.log.info(green(summary));
+  } else {
+    this.log.error(red(summary));
+  }
+  this.log.info("\n");
 };
 
 Check.prototype.run = function () {
-  this.startTime = new Date().getTime();
+  var now = new Date();
+  this.startTime = now.getTime();
+  this.log.log(this.log.name + ': check started at ' + now);
   this.checkFiles();
   this.printSummary();
   return this.isSuccess();

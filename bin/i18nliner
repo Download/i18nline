@@ -1,5 +1,0 @@
-#!/usr/bin/env node
-
-var minimist = require('minimist');
-var argv = require('minimist')(process.argv.slice(2));
-require('../dist/lib/main').Commands.run(argv._[0], argv);

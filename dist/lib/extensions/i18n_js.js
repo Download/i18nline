@@ -61,7 +61,7 @@ var extend = function extend(I18n) {
   I18n.CallHelpers = _call_helpers2.default;
   I18n.Utils = _utils2.default;
 
-  I18n.translateWithoutI18nliner = I18n.translate;
+  I18n.translateWithoutI18nline = I18n.translate;
   I18n.translate = function () {
     var args = _call_helpers2.default.inferArguments([].slice.call(arguments));
     var key = args[0];
@@ -70,7 +70,7 @@ var extend = function extend(I18n) {
     var defaultValue = options.defaultValue;
     if (defaultValue) options.defaultValue = _call_helpers2.default.normalizeDefault(defaultValue, options);
 
-    return this.translateWithoutI18nliner(key, options);
+    return this.translateWithoutI18nline(key, options);
   };
   I18n.t = I18n.translate;
 };
