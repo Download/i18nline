@@ -70,7 +70,7 @@ Utils.createLogger = function (name, silent) {
   } else try {
     return require('ulog')(name);
   } catch (e) {
-    return Utils.extend({ name: name }, console, { debug: console.log });
+    return Utils.extend({ name: name }, console, { debug: nop, log: nop });
   }
 };
 

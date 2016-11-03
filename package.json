@@ -1,7 +1,7 @@
 {
   "name": "i18nline",
   "description": "Keep your translations in line",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
     "test": "grunt test && mocha tmp/test --recursive",
     "i18nline": "node ./bin/i18nline.js",
@@ -44,6 +44,7 @@
     "gruntify-eslint": "^3.1.0",
     "matchdep": "^1.0.1",
     "mocha": "^3.1.2",
+    "pkgcfg": "^0.8.1",
     "rimraf": "^2.2.8",
     "sinon": "^1.17.6",
     "temp": "^0.8.0",
@@ -52,7 +53,6 @@
   "dependencies": {
     "cli-color": "^1.1.0",
     "crc32": "~0.2.2",
-    "figlet": "^1.2.0",
     "gglobby": "0.0.3",
     "minimist": "^1.1.0",
     "mkdirp": "^0.5.0",

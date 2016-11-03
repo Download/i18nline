@@ -9,13 +9,13 @@
 
 
 ```
-  ██╗    ███╗   ██╗██╗     ██╗███╗   ██╗███████╗
-  ██║    ████╗  ██║██║     ██║████╗  ██║██╔════╝
-  ██║ 18 ██╔██╗ ██║██║     ██║██╔██╗ ██║█████╗
-  ██║    ██║╚██╗██║██║     ██║██║╚██╗██║██╔══╝
-  ██║    ██║ ╚████║███████╗██║██║ ╚████║███████╗
-  ╚═╝    ╚═╝  ╚═══╝╚══════╝╚═╝╚═╝  ╚═══╝╚══════╝
-          KEEP YOUR TRANSLATIONS IN LINE
+  ██╗   ███╗   ██╗██╗     ██╗███╗   ██╗███████╗
+  ██║   ████╗  ██║██║     ██║████╗  ██║██╔════╝
+  ██║18 ██╔██╗ ██║██║     ██║██╔██╗ ██║█████╗
+  ██║   ██║╚██╗██║██║     ██║██║╚██╗██║██╔══╝
+  ██║   ██║ ╚████║███████╗██║██║ ╚████║███████╗
+  ╚═╝   ╚═╝  ╚═══╝╚══════╝╚═╝╚═╝  ╚═══╝╚══════╝
+         KEEP YOUR TRANSLATIONS IN LINE
 ```
 
 No .js/yml translation files. Easy inline defaults. Optional keys. Easy
@@ -119,8 +119,8 @@ Sure, but *you* don't need to write them. Just run:
 i18nline export
 ```
 
-This extracts all default translations from your codebase and outputs them
-to `config/locales/generated/en.json`
+This extracts all default translations from your codebase and outputs them 
+to `i18n/en.json`
 
 ### It's okay to lose your keys
 
@@ -245,6 +245,108 @@ I18n.t({one: "1 person", other: "%{count} people"},
   {count: users.length});
 ```
 
+## Configuration
+
+In your `package.json`, create an object named `"i18n"` and 
+specify your project's global configuration settings there.
+If i18nline detects that your project is using 
+[pkgcfg](https://npmjs.com/package/pkgcfg), it will load 
+`package.json` using it, enabling all dynamic goodness. 
+
+Or, if you prefer, you can create a `.i18nrc` options file in the root
+of your project. 
+
+You can also pass some configuration options directly to the CLI.
+
+If multiple sources of configuration are present, they will be 
+applied in this order, with the last option specified overwriting
+the previous settings:
+
+* Defaults
+* package.json
+* .i18nrc file
+* CLI arguments
+
+For most projects, no configuration should be needed. The default 
+configuration should work without changes, unless:
+
+* You have source files in a directory that is in the default `ignoreDirectories`, 
+  or in the root of your project (not recommended).
+* You have source files that don't match the default `patterns`
+* You need the output to go some place other than the default `outputFile`
+* You have i18nline(r) `plugins` that you want to configure
+
+The typical configuration you'd want for a regular project would look 
+something like this:
+
+```json
+{
+  "outputFile": "my/translations/en.json"
+}
+```
+
+### Options 
+
+#### basePath
+String. Defaults to `"."`. The base path (relative to the current directory).
+`directories`, `ignoreDirectories` and `outputFile` are interpreted as being
+relative to `basePath`.
+
+#### directories
+Array of directories, or a String containing a comma separated 
+list of directories. Defaults to `undefined`. 
+Only files in these directories will be processed.  
+
+> If no directories are specified, the i18nline CLI will try to 
+auto-configure this setting with all directories in `basePath` 
+that are not excluded by `ignoreDirectories`. This mostly works
+great, but if you have source files in the root of your project,
+they won't be found this way. Set `directories` to `"."` to force
+the processing to start at the root (not recommended as it may)
+be very slow. 
+
+#### ignoreDirectories
+Array of directories, or a String containing a comma separated 
+list of directories. Defaults to `['node_modules', 'bower_components', '.git', 'dist']`. 
+These directories will not be processed.  
+
+#### patterns
+Array of pattern strings, or a String containing a (comma separated 
+list of) pattern(s). Defaults to `["**/*.js", "**/*.jsx"]`. Only 
+files matching these patterns will be processed.  
+
+> Note that for your convenience, the defaults include .jsx files
+
+#### ignorePatterns
+Array of pattern strings, or a String containing a (comma separated 
+list of) pattern(s). Defaults to `[]`. Files matching these patterns
+will be ignored, even if they match `patterns`. 
+
+#### outputFile 
+String. Defaults to `'i18n/en.json'`. 
+Used when exporting the translations. 
+
+#### inferredKeyFormat
+String. Defaults to `"underscored_crc32"`. 
+When no key was specified for a translation, `i18nline` will infer one
+from the default translation using the format specified here. Available
+formats are: `"underscored"` and `"underscored_crc32"`, where the second
+form uses a checksum over the whole message to ensure that changes in the
+message beyond the `underscoredKeyLength` limit will still result in the
+key changing. 
+
+> If `inferredKeyFormat` is set to an unknown format, the unaltered default
+translation string is used as the key (not recommended).
+
+#### underscoredKeyLength
+Number. Defaults to `50`. The maximum length the inferred `underscored` 
+key derived of a message will be. If the message is longer than this
+limit, changes in the message will only have an effect on the inferred
+key if `inferredKeyFormat` is set to `underscored_crc32`. In that 
+case the checksum is appended to the underscored key (separated by an
+underscore), making the total max key length `underscoredKeyLength + 9`.
+
+
 ## Command Line Utility
 
 ### i18nline check
@@ -259,16 +361,61 @@ Does an `i18nline check`, and then extracts all default translations from your
 codebase, merges them with any other translation files, and outputs them to
 `locales/generated/translations.json` (or `.js`).
 
-### i18nline diff
+### i18nline help 
 
-Does an `i18nline export` and creates a diff from a previous one (path or git
-commit hash). This is useful if you only want to see what has changed since a
-previous release of your app.
+Prints this message:
 
-### i18nline import
+```sh
 
-Imports a translated .json/.js file. Ensures that all placeholders and
-wrappers are present.
+  ██╗   ███╗   ██╗██╗     ██╗███╗   ██╗███████╗
+  ██║   ████╗  ██║██║     ██║████╗  ██║██╔════╝
+  ██║18 ██╔██╗ ██║██║     ██║██╔██╗ ██║█████╗
+  ██║   ██║╚██╗██║██║     ██║██║╚██╗██║██╔══╝
+  ██║   ██║ ╚████║███████╗██║██║ ╚████║███████╗
+  ╚═╝   ╚═╝  ╚═══╝╚══════╝╚═╝╚═╝  ╚═══╝╚══════╝
+         KEEP YOUR TRANSLATIONS IN LINE
+
+Usage
+-----
+i18nline command [options]
+
+Commands
+--------
+check     Performs a dry-run with all checks, but does not write any files
+export    Performs a check, then writes the default translation file
+help      Prints this help screen
+
+Options
+--------
+You can set/override all of i18nline's configuration options on the command line.
+SEE: https://github.com/download/i18nline#configuration
+In addition these extra options are available in the CLI:
+-o             Alias for --outputFile (SEE config docs)
+--only         Only process a single file/directory/pattern
+--silent       Don't log any messages
+-s             Alias for --silent
+
+Examples
+--------
+$ i18nline check --only=src/some-file.js
+> Only check the given file for errors
+
+$ i18nline export --directory=src --patterns=**/*.js,**/*.jsx
+> Export all translations in `src` directory from .js and .jsx files
+> to default output file i18n/en.json
+
+$ i18nline export -o=translations/en.json
+> Export all translations in any directory but the ignored ones, from
+> .js and .jsx files to the given output file translations/en.json
+
+See what's happening
+---------------------
+i18nline uses ulog for it's logging, when available. To use it:
+$ npm install --save-dev ulog
+$ LOG=debug   (or log, info, warn, error)
+Now, i18nline will log any messages at or above the set level.
+
+```
 
 #### .i18nignore and more
 
@@ -288,16 +435,16 @@ i18nline check --only=/app/**/user*
 
 ## Compatibility
 
-i18nline is backwards compatible with i18n.js, so you can add it to an
-established (and already internationalized) app. Your existing
+i18nline is compatible with i18n.js, i18nliner-js, i18nliner (ruby) etc so you can 
+add it to an established (and already internationalized) app. Your existing
 translation calls, keys and translation files will still just work without modification.
 
 ## Related Projects
 
-* [i18nline (ruby)](https://github.com/jenseng/i18nline)
-* [i18nline-js](https://github.com/jenseng/i18nline-js)
-* [i18nline-handlebars](https://github.com/fivetanley/i18nline-handlebars)
-* [react-i18nline](https://github.com/jenseng/react-i18nline)
+* [i18nliner (ruby)](https://github.com/jenseng/i18nliner)
+* [i18nliner-js](https://github.com/jenseng/i18nliner-js)
+* [i18nliner-handlebars](https://github.com/fivetanley/i18nliner-handlebars)
+* [react-i18nliner](https://github.com/jenseng/react-i18nliner)
 * [preact-i18nline](https://github.com/download/preact-i18nline)
 
 ## License

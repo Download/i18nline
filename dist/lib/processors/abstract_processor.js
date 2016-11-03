@@ -29,23 +29,18 @@ function chdir(dir, cb) {
 } /* global process */
 
 function AbstractProcessor(translations, options) {
+  this.log = _utils2.default.createLogger('i18nline:' + this.constructor.name, options.silent || options.s);
+  this.log.debug(this.log.name + ': Initializing processor', options);
   this.translations = translations;
   this.translationCount = 0;
   this.fileCount = 0;
-  this.checkWrapper = options.checkWrapper || this.checkWrapper;
-  if (options.patterns) {
-    this.pattern = typeof options.patterns == 'string' ? options.patterns.split(',') : options.patterns;
-  } else {
-    this.pattern = options.pattern || this.defaultPattern;
-  }
   this.file = options.file;
-  if (options.directories) {
-    this.directories = typeof options.directories == 'string' ? options.directories.split(',') : options.directories;
-  } else if (options.directory) {
-    this.directories = [options.directory];
-  }
   this.only = options.only;
-  this.log = _utils2.default.createLogger('i18nline:' + this.constructor.name, options.silent || options.s);
+  this.checkWrapper = options.checkWrapper || this.checkWrapper;
+  this.directories = options.directories;
+  this.patterns = options.patterns;
+  this.ignorePatterns = options.ignorePatterns;
+  this.log.debug(this.log.name + ': Initialized processor', this);
 }
 
 AbstractProcessor.prototype.checkWrapper = function (file, checker) {
@@ -53,12 +48,10 @@ AbstractProcessor.prototype.checkWrapper = function (file, checker) {
 };
 
 AbstractProcessor.prototype.files = function (directory) {
-  var pattern = this.pattern instanceof Array ? this.pattern : [this.pattern];
   return chdir(directory, function () {
-    var fileScope = _gglobby2.default.select(pattern).reject(["/node_modules", "/bower_components"]).reject(_i18nline2.default.ignore());
+    var fileScope = _gglobby2.default.select(this.patterns).reject(this.ignorePatterns).reject(_i18nline2.default.ignore());
     if (this.only) {
-      var only = this.only instanceof Array ? this.only : [this.only];
-      fileScope = fileScope.select(only);
+      fileScope = fileScope.select(this.only instanceof Array ? this.only : [this.only]);
     }
     return fileScope.files;
   }.bind(this));
@@ -92,8 +85,7 @@ AbstractProcessor.prototype.checkFile = function (file) {
 
 AbstractProcessor.prototype.getDirectories = function () {
   if (this.directories) return this.directories;
-  if (_i18nline2.default.config.directory) return [_i18nline2.default.config.directory];
-  if (_i18nline2.default.config.directories.length) return _i18nline2.default.config.directories;
+  if (_i18nline2.default.config.directories) return typeof _i18nline2.default.config.directories == 'string' ? _i18nline2.default.config.directories.split(',') : _i18nline2.default.config.directories;
   return [_i18nline2.default.config.basePath];
 };
 

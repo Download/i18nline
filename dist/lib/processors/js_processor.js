@@ -24,7 +24,6 @@ function JsProcessor(translations, options) {
 
 JsProcessor.prototype = Object.create(_abstract_processor2.default.prototype);
 JsProcessor.prototype.constructor = JsProcessor;
-JsProcessor.prototype.defaultPattern = "**/*.js";
 JsProcessor.prototype.I18nJsExtractor = _i18n_js_extractor2.default;
 
 JsProcessor.prototype.checkContents = function (source, name) {

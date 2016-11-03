@@ -35,10 +35,12 @@ Export.prototype.run = function () {
   var locale = 'en';
   var translations = {};
   translations[locale] = this.translations.translations;
-  this.outputFile = _i18nline2.default.config.basePath + '/' + (this.options.outputFile || "config/locales/generated/" + locale + ".json");
+  var basePath = this.options.basePath || _i18nline2.default.config.basePath;
+  var outputFile = this.options.outputFile || _i18nline2.default.config.outputFile;
+  this.outputFile = basePath + '/' + outputFile;
   _mkdirp2.default.sync(this.outputFile.replace(/\/[^\/]+$/, ''));
   if (success) {
-    _fs2.default.writeFileSync(this.outputFile, JSON.stringify(translations));
+    _fs2.default.writeFileSync(this.outputFile, JSON.stringify(translations, null, 2));
     this.log.info("Wrote default translations to " + this.outputFile + "\n");
   }
   return success;

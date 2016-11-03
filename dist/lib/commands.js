@@ -40,40 +40,14 @@ function capitalize(string) {
 
 var Commands = {
   run: function run(name, options) {
+    name = name || 'help';
     options = options || {};
-    if (!name) {
-      name = 'help';
+    log.debug(log.name + ': ' + name, options);
+    if (name != 'help' && !options.directories) {
+      options.directories = autoConfigureDirectories(options);
     }
     var Command = this[capitalize(name)];
     if (Command) {
-      if (name != 'help' && !options.directories && !options.directory) {
-        log.warn(log.name + ': WARN: No directories set in options', options);
-        log.warn(log.name + ': WARN: Either configure the default search directories in .i18nrc,');
-        log.warn(log.name + ': WARN: or pass the --directories command line option.');
-
-        var directories = [];
-        var defaultDirs = ['src', 'lib'];
-        defaultDirs.forEach(function (dir) {
-          try {
-            var stats = _fs2.default.lstatSync(dir);
-            if (stats && stats.isDirectory()) {
-              directories.push(dir);
-            }
-          } catch (e) {
-            log.debug(log.name + ': Directory not found: ' + dir);
-          }
-        });
-        if (!directories.length) {
-          log.warn(log.name + ': WARN: None of the default directories found', defaultDirs);
-          log.warn(log.name + ': WARN: Falling back to using project root directory');
-          log.warn(log.name + ': WARN: This may take a long time. CTRL+C to abort');
-          log.warn('');
-        } else {
-          log.warn(log.name + ': WARN: Using default directories', directories);
-          options.directories = directories;
-        }
-      }
-
       try {
         return new Command(options).run();
       } catch (e) {
@@ -89,5 +63,13 @@ var Commands = {
   Export: _export2.default,
   Help: _help2.default
 };
+
+function autoConfigureDirectories(options) {
+  log.debug(log.name + ': autoConfigureDirectories');
+  var base = _path2.default.resolve(process.cwd(), options.basePath);
+  return _fs2.default.readdirSync(base).filter(function (file) {
+    return _fs2.default.statSync(_path2.default.resolve(base, file)).isDirectory() && options.ignoreDirectories.indexOf(file) === -1;
+  });
+}
 
 exports.default = Commands;

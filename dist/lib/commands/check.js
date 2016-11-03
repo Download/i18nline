@@ -52,11 +52,11 @@ Check.prototype.setUpProcessors = function () {
     this.processors.push(new Processor(this.translations, {
       translations: this.translations,
       checkWrapper: this.checkWrapper.bind(this),
-      patterns: this.options.patterns,
-      pattern: this.options.pattern,
       only: this.options.only,
+      patterns: this.options.patterns,
+      ignorePatterns: this.options.ignorePatterns,
       directories: this.options.directories,
-      directory: this.options.directory
+      ignoreDirectories: this.options.ignoreDirectories
     }));
   }
 };
