@@ -52,45 +52,31 @@ eventually be merged back into the main project but for now I need these changes
 
 ## Installation
 
-To install the command-line tools (for extracting/managing
-translations), use npm (see below).
-
-Depending on how you manage JavaScript dependencies in your app, you have
-several options for installing/including the runtime extensions:
-
-### regular old script
-
-Download the [runtime extensions](https://github.com/download/i18nline/blob/master/build/i18n_js_extension.js)
-and include them on the page after i18n.js (via `<script>`, asset pipeline, etc).
-
-### npm
-
 ```sh
-npm install -S i18n-js i18nline
+npm install --save-dev i18nline
 ```
 
-```javascript
-var I18n = require('i18n-js');
-// add the runtime extensions
-require('i18nline/dist/lib/extensions/i18n_js')['default'](I18n);
+i18nline has a dependency on i18n-js, so it will be installed automatically. i18nline adds some
+extensions to the i18n-js runtime. If you require i18n-js via i18nline, these will be added 
+automatically for you:
+
+```js
+var I18n = require('i18nline/i18n');
+// Ready to rock!
 ```
 
-### amd
+Alternatively, you can add i18n to your app any way you like and apply the extensions manually:
 
-Download the [runtime extensions](https://github.com/download/i18nline/blob/master/build/i18n_js_extension.js)
-and use the requirejs shim config to add them (and i18n.js) to your app, e.g.
-
-```javascript
-requirejs.config({
-  shims: {
-    'i18n': 'I18n',
-    'i18n_js_extension': {
-      deps: 'i18n',
-      exports: 'I18n'
-    }
-  }
-})
+```js
+var I18n = // get it from somehwere... script tag or whatever
+// add the runtime extensions manually
+require('i18nline/lib/extensions/i18n_js')(I18n);
 ```
+
+Every file that needs to translate stuff needs to get access to the `I18n` object somehow. 
+You can either add a require call to every such file, or use `i18n` from the global sope. 
+The choice is yours.
+
 
 ## Features
 
@@ -249,7 +235,20 @@ I18n.t({one: "1 person", other: "%{count} people"},
 
 In your `package.json`, create an object named `"i18n"` and 
 specify your project's global configuration settings there.
-If i18nline detects that your project is using 
+
+*package.json*
+```json
+{
+  "name": "my-module",
+  "version": "1.0.0",
+  
+  "i18n": {
+    "settings": "go here"
+  }
+}
+```
+
+> If i18nline detects that your project is using 
 [pkgcfg](https://npmjs.com/package/pkgcfg), it will load 
 `package.json` using it, enabling all dynamic goodness. 
 
@@ -365,7 +364,7 @@ codebase, merges them with any other translation files, and outputs them to
 
 Prints this message:
 
-```sh
+```
 
   ██╗   ███╗   ██╗██╗     ██╗███╗   ██╗███████╗
   ██║   ████╗  ██║██║     ██║████╗  ██║██╔════╝
@@ -414,7 +413,6 @@ i18nline uses ulog for it's logging, when available. To use it:
 $ npm install --save-dev ulog
 $ LOG=debug   (or log, info, warn, error)
 Now, i18nline will log any messages at or above the set level.
-
 ```
 
 #### .i18nignore and more
@@ -438,6 +436,13 @@ i18nline check --only=/app/**/user*
 i18nline is compatible with i18n.js, i18nliner-js, i18nliner (ruby) etc so you can 
 add it to an established (and already internationalized) app. Your existing
 translation calls, keys and translation files will still just work without modification.
+
+If you want to maximize the portability of your code across the I18n ecosystem, you
+should avoid including hard dependencies to any particular library in every file. One way
+to easily achieve that is to set `I18n` as a global. Another simple way is to make your 
+own `i18n.js` file that just requires `'i18nline/i18n'`and sets it on `module.exports`. then
+you let all your modules require this file. If you ever want to change 'providers',
+you only need to change this file. 
 
 ## Related Projects
 

@@ -1,11 +1,11 @@
 /* global describe, it */
 
-import Export from '../../lib/commands/export';
-import I18nline from '../../lib/i18nline';
-import {assert} from "chai";
-import fs from "fs";
-import temp from "temp";
-import rimraf from "rimraf";
+var Export = require('../../lib/commands/export');
+var I18nline = require('../../lib/i18nline');
+var assert = require('chai').assert;
+var fs = require('fs');
+var temp = require('temp');
+var rimraf = require('rimraf');
 
 describe('Export', function() {
   describe(".run", function() {

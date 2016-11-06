@@ -1,6 +1,6 @@
 /* global describe, it */
-import {assert} from "chai";
-import CallHelpers from "../lib/call_helpers";
+var {assert} = require('chai');
+var CallHelpers = require('../lib/call_helpers');
 
 describe("CallHelpers", function() {
   describe("applyWrappers", function() {

@@ -1,7 +1,7 @@
 /* global describe, it */
-import {assert} from "chai";
-import I18nJsExtractor from "../../lib/extractors/i18n_js_extractor";
-import Errors from "../../lib/errors";
+var assert = require('chai').assert;
+var I18nJsExtractor = require('../../lib/extractors/i18n_js_extractor');
+var Errors = require('../../lib/errors');
 
 describe("I18nJsExtractor", function() {
   describe(".translations", function() {

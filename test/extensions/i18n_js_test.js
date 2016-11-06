@@ -1,8 +1,8 @@
 /* global describe, context, it */
-import {assert} from "chai";
-import sinon from "sinon";
-import extend from "../../lib/extensions/i18n_js";
-import Utils from "../../lib/utils";
+var assert = require('chai').assert;
+var sinon = require('sinon');
+var extend = require('../../lib/extensions/i18n_js');
+var Utils = require('../../lib/utils');
 
 describe("I18nJs extension", function() {
   var I18n = {

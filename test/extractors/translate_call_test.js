@@ -1,8 +1,8 @@
 /* global describe, it */
-import {assert} from "chai";
-import TranslateCall from "../../lib/extractors/translate_call";
-import Errors from "../../lib/errors";
-import I18nline from "../../lib/i18nline";
+var assert = require('chai').assert;
+var TranslateCall = require('../../lib/extractors/translate_call');
+var Errors = require('../../lib/errors');
+var I18nline = require('../../lib/i18nline');
 
 describe("TranslateCall", function() {
   function call() {

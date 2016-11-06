@@ -1,8 +1,8 @@
 /* global describe, it */
 
-import Check from '../../lib/commands/check';
-import I18nline from '../../lib/i18nline';
-import {assert} from "chai";
+var Check = require('../../lib/commands/check');
+var I18nline = require('../../lib/i18nline');
+var assert = require('chai').assert;
 
 describe('Check', function() {
   describe(".run", function() {
