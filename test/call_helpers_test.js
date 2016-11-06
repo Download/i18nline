@@ -1,5 +1,5 @@
 /* global describe, it */
-var {assert} = require('chai');
+var assert = require('chai').assert;
 var CallHelpers = require('../lib/call_helpers');
 
 describe("CallHelpers", function() {
