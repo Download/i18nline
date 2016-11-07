@@ -61,20 +61,20 @@ extensions to the i18n-js runtime. If you require i18n-js via i18nline, these wi
 automatically for you:
 
 ```js
-var I18n = require('i18nline/i18n');
+var I18n = require('i18nline/lib/i18n');
 // Ready to rock!
 ```
 
 Alternatively, you can add i18n to your app any way you like and apply the extensions manually:
 
 ```js
-var I18n = // get it from somehwere... script tag or whatever
+var I18n = // get it from somewhere... script tag or whatever
 // add the runtime extensions manually
 require('i18nline/lib/extensions/i18n_js')(I18n);
 ```
 
 Every file that needs to translate stuff needs to get access to the `I18n` object somehow. 
-You can either add a require call to every such file, or use `i18n` from the global sope. 
+You can either add a require call to every such file, or use `I18n` from the global sope. 
 The choice is yours.
 
 
