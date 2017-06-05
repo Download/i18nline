@@ -30,7 +30,7 @@
     }
   ],
   "devDependencies": {
-    "chai": "^3.5.0",
+    "chai": "^4.0.2",
     "matchdep": "^1.0.1",
     "mocha": "^3.1.2",
     "pkgcfg": "^0.8.1",
