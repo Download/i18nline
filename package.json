@@ -40,7 +40,7 @@
     "ulog": "^1.0.0"
   },
   "dependencies": {
-    "chalk": "^1.1.3",
+    "chalk": "^2.0.0",
     "crc32": "~0.2.2",
     "extend": "^3.0.0",
     "gglobby": "0.0.3",
