@@ -41,6 +41,7 @@
   "dependencies": {
     "chalk": "^2.3.2",
     "crc32": "~0.2.2",
+    "esprima": "^4.0.0",
     "extend": "^3.0.1",
     "gglobby": "0.0.3",
     "i18n-js": "^3.0.3",
