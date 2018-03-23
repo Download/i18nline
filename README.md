@@ -45,10 +45,11 @@ i18nline will do it for you.
 
 ## What is this?
 
-This project is a fork of Jon Jensen's [i18nline-js](https://github.com/jenseng/i18nline-js)
-that applies some long open PR, adds some logging (powered by [ulog](https://npmjs.com/package/ulog)),
-a help screen for the CLI and some auto-config. I'm hoping any changes I make in this fork will
-eventually be merged back into the main project but for now I need these changes.
+This project is a fork of Jon Jensen's 
+[i18nline-js](https://github.com/jenseng/i18nline-js)
+that applies some long open PR, adds some logging 
+(powered by [ulog](https://npmjs.com/package/ulog)),
+a help screen for the CLI and some auto-config. 
 
 ## Installation
 

@@ -57,20 +57,27 @@ describe("I18nJsExtractor", function() {
 
     it("should bail on invalid t calls", function() {
       assert.throws(function(){
-        extract("I18n.t(foo)");
-      }, Errors.InvalidSignature);
+        // Chai handling of `throws` changed from 3.5 to 4.x
+        // https://github.com/chaijs/chai/issues/1079
+        try {extract("I18n.t(foo)");} 
+        catch(e) {Assert.instanceOf(e, Errors.InvalidSignature); throw e}
+      });
       assert.throws(function(){
-        extract("I18n.t('foo', foo)");
-      }, Errors.InvalidSignature);
+        try {extract("I18n.t('foo', foo)");} 
+        catch(e) {Assert.instanceOf(e, Errors.InvalidSignature); throw e}
+      });
       assert.throws(function(){
-        extract("I18n.t('foo', \"hello \" + man)");
-      }, Errors.InvalidSignature);
+        try {extract("I18n.t('foo', \"hello \" + man)");} 
+        catch(e) {Assert.instanceOf(e, Errors.InvalidSignature); throw e}
+      });
       assert.throws(function(){
-        extract("I18n.t('a', \"a\", {}, {})");
-      }, Errors.InvalidSignature);
+        try {extract("I18n.t('a', \"a\", {}, {})");} 
+        catch(e) {Assert.instanceOf(e, Errors.InvalidSignature); throw e}
+      });
       assert.throws(function(){
-        extract("I18n.t({one: '1', other: '2'})");
-      }, Errors.MissingCountValue);
+        try {extract("I18n.t({one: '1', other: '2'})");} 
+        catch(e) {Assert.instanceOf(e, Errors.MissingCountValue); throw e}
+      });
     });
   });
 });

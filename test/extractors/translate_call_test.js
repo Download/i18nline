@@ -11,9 +11,12 @@ describe("TranslateCall", function() {
 
   describe("signature", function() {
     it("should reject extra arguments", function() {
+      // Chai handling of `throws` changed from 3.5 to 4.x
+      // https://github.com/chaijs/chai/issues/1079
       assert.throws(function() {
-        call("key", "value", {}, "wat");
-      }, Errors.InvalidSignature);
+        try {call("key", "value", {}, "wat");}
+        catch(e) {assert.instanceOf(e, Errors.InvalidSignature); throw e}
+      });
     });
 
     it("should accept a valid key or default", function() {
@@ -28,14 +31,16 @@ describe("TranslateCall", function() {
 
     it("should require at least a key or default", function() {
       assert.throws(function() {
-        call();
-      }, Errors.InvalidSignature);
+        try {call();}
+        catch(e) {assert.instanceOf(e, Errors.InvalidSignature); throw e}
+      });
     });
 
     it("should require a literal default", function() {
       assert.throws(function() {
-        call("key.key", TranslateCall.prototype.UNSUPPORTED_EXPRESSION);
-      }, Errors.InvalidSignature);
+        try {call("key.key", TranslateCall.prototype.UNSUPPORTED_EXPRESSION);}
+        catch(e) {assert.instanceOf(e, Errors.InvalidSignature); throw e}
+      });
     });
 
     // for legacy calls, e.g. I18n.t("key", {defaultValue: "foo"})
@@ -46,8 +51,9 @@ describe("TranslateCall", function() {
 
     it("should ensure options is an object literal, if provided", function() {
       assert.throws(function() {
-        call("key", "value", TranslateCall.prototype.UNSUPPORTED_EXPRESSION);
-      }, Errors.InvalidSignature);
+        try {call("key", "value", TranslateCall.prototype.UNSUPPORTED_EXPRESSION);}
+        catch(e) {assert.instanceOf(e, Errors.InvalidSignature); throw e}
+      });
     });
   });
 
@@ -133,34 +139,39 @@ describe("TranslateCall", function() {
 
     it("should reject invalid keys", function() {
       assert.throws(function() {
-        call({one: "asdf", twenty: "qwerty"}, {count: 1});
-      }, Errors.InvalidPluralizationKey);
+        try {call({one: "asdf", twenty: "qwerty"}, {count: 1});}
+        catch(e) {assert.instanceOf(e, Errors.InvalidPluralizationKey); throw e}
+      });
     });
 
     it("should require essential keys", function() {
       assert.throws(function() {
-        call({one: "asdf"}, {count: 1});
-      }, Errors.MissingPluralizationKey);
+        try {call({one: "asdf"}, {count: 1});}
+        catch(e) {assert.instanceOf(e, Errors.MissingPluralizationKey); throw e}
+      });
     });
 
     it("should reject invalid count defaults", function() {
       assert.throws(function() {
-        call({one: "asdf", other: TranslateCall.prototype.UNSUPPORTED_EXPRESSION}, {count: 1});
-      }, Errors.InvalidPluralizationDefault);
+        try {call({one: "asdf", other: TranslateCall.prototype.UNSUPPORTED_EXPRESSION}, {count: 1});}
+        catch(e) {assert.instanceOf(e, Errors.InvalidPluralizationDefault); throw e}
+      });
     });
 
     it("should complain if no :count is provided", function() {
       assert.throws(function() {
-        call({one: "asdf", other: "qwerty"});
-      }, Errors.MissingCountValue);
+        try {call({one: "asdf", other: "qwerty"});}
+        catch(e) {assert.instanceOf(e, Errors.MissingCountValue); throw e}
+      });
     });
   });
 
   describe("validation", function() {
     it("should require all interpolation values", function() {
       assert.throws(function() {
-        call("asdf %{bob}");
-      }, Errors.MissingInterpolationValue);
+        try {call("asdf %{bob}");}
+        catch(e) {assert.instanceOf(e, Errors.MissingInterpolationValue); throw e}
+      });
 
       // only throw if it's not set
       assert.doesNotThrow(function() {
@@ -170,8 +181,9 @@ describe("TranslateCall", function() {
 
     it("should require all interpolation values in count defaults", function() {
       assert.throws(function() {
-        call({one: "asdf %{bob}", other: "querty"});
-      }, Errors.MissingInterpolationValue);
+        try {call({one: "asdf %{bob}", other: "querty"});}
+        catch(e) {assert.instanceOf(e, Errors.MissingInterpolationValue); throw e}
+      });
     });
   });
 });

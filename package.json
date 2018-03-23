@@ -1,7 +1,7 @@
 {
   "name": "i18nline",
   "description": "Keep your translations in line",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "scripts": {
     "test": "mocha \"./test/**/*_test.js\" --recursive",
     "i18nline": "node ./bin/i18nline.js"
@@ -30,24 +30,24 @@
     }
   ],
   "devDependencies": {
-    "chai": "^3.5.0",
-    "matchdep": "^1.0.1",
-    "mocha": "^3.1.2",
-    "pkgcfg": "^0.8.1",
-    "rimraf": "^2.5.4",
-    "sinon": "^1.17.6",
-    "temp": "^0.8.0",
-    "ulog": "^1.0.0"
+    "chai": "^4.1.2",
+    "matchdep": "^2.0.0",
+    "mocha": "^5.0.5",
+    "pkgcfg": "^0.9.1",
+    "rimraf": "^2.6.2",
+    "sinon": "^4.4.8",
+    "temp": "^0.8.3"
   },
   "dependencies": {
-    "chalk": "^1.1.3",
+    "chalk": "^2.3.2",
     "crc32": "~0.2.2",
-    "extend": "^3.0.0",
+    "extend": "^3.0.1",
     "gglobby": "0.0.3",
-    "i18n-js": "^1.0.0",
+    "i18n-js": "^3.0.3",
     "minimist": "^1.1.0",
     "mkdirp": "^0.5.0",
-    "recast": "^0.11.16",
-    "speakingurl": "^10.0.0"
+    "recast": "^0.14.7",
+    "speakingurl": "^14.0.1",
+    "ulog": "^1.1.0"
   }
 }
