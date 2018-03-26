@@ -415,10 +415,10 @@ Now, i18nline will log any messages at or above the set level
 
 #### .i18nignore and more
 
-By default, the check and export tasks will look for inline translations
-in any .js files. You can tell it to always skip certain
-files/directories/patterns by creating a .i18nignore file. The syntax is the
-same as [.gitignore](http://www.kernel.org/pub/software/scm/git/docs/gitignore.html),
+By default, the check and export commands will look for inline translations
+in any .js files. You can tell it to always skip certain files/directories/patterns 
+by creating a .i18nignore file. The syntax is the same as 
+[.gitignore](http://www.kernel.org/pub/software/scm/git/docs/gitignore.html),
 though it supports
 [a few extra things](https://github.com/jenseng/globby#compatibility-notes).
 
