@@ -371,20 +371,20 @@ Prints this message:
   ██║   ██║╚██╗██║██║     ██║██║╚██╗██║██╔══╝
   ██║   ██║ ╚████║███████╗██║██║ ╚████║███████╗
   ╚═╝   ╚═╝  ╚═══╝╚══════╝╚═╝╚═╝  ╚═══╝╚══════╝
-         KEEP YOUR TRANSLATIONS IN LINE
+         keep your translations in line
 
 Usage
------
-i18nline command [options]
+
+i18nline <command> [options]
 
 Commands
---------
+
 check     Performs a dry-run with all checks, but does not write any files
 export    Performs a check, then writes the default translation file
 help      Prints this help screen
 
 Options
---------
+
 You can set/override all of i18nline's configuration options on the command line.
 SEE: https://github.com/download/i18nline#configuration
 In addition these extra options are available in the CLI:
@@ -394,7 +394,7 @@ In addition these extra options are available in the CLI:
 -s             Alias for --silent
 
 Examples
---------
+
 $ i18nline check --only=src/some-file.js
 > Only check the given file for errors
 
@@ -407,10 +407,10 @@ $ i18nline export -o=translations/en.json
 > .js and .jsx files to the given output file translations/en.json
 
 See what's happening
----------------------
-i18nline uses ulog for it's logging. The default level is info. To change the log level:
+
+i18nline uses ulog for it's logging. The default level is info. To change it:
 $ LOG=debug   (or trace, log, info, warn, error)
-Now, i18nline will log any messages at or above the set level.
+Now, i18nline will log any messages at or above the set level
 ```
 
 #### .i18nignore and more
