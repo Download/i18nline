@@ -1,12 +1,14 @@
 /* global describe, it */
 var assert = require('chai').assert;
+var JsProcessor = require('../../lib/processors/js_processor');
 var I18nJsExtractor = require('../../lib/extractors/i18n_js_extractor');
 var Errors = require('../../lib/errors');
 
 describe("I18nJsExtractor", function() {
   describe(".translations", function() {
     function extract(source) {
-      var extractor = new I18nJsExtractor({source: source});
+      var ast = JsProcessor.prototype.parse(source);
+      var extractor = new I18nJsExtractor({ast: ast});
       extractor.run();
       return extractor.translations.translations;
     }
@@ -36,6 +38,10 @@ describe("I18nJsExtractor", function() {
       );
       assert.deepEqual(
         extract("I18n.t('bar', 'Baz')"),
+        {bar: "Baz"}
+      );
+      assert.deepEqual(
+        extract("I18n.t('bar', `Baz`)"),
         {bar: "Baz"}
       );
       assert.deepEqual(
