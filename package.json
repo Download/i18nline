@@ -1,12 +1,13 @@
 {
   "name": "i18nline",
   "description": "Keep your translations in line",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "scripts": {
     "test": "mocha \"./test/**/*_test.js\" --recursive",
     "i18nline": "node ./bin/i18nline.js"
   },
   "main": "./lib/main",
+  "browser": "./lib/i18n",
   "bin": {
     "i18nline": "./bin/i18nline.js"
   },
