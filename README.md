@@ -65,12 +65,12 @@ translation files based on what it finds. To setup a project you need to:
 * Import `I18n` and use `I18n.t()` to render internationalized text.
 * Create an empty file in the `out` folder (by default: `'src/i18n'`) named 
   `'[locale].json'` for each locale you want to support.
-* Run `i18nline export` to synch the translation files and index file.
+* Run `i18nline synch` to synch the translation files and index file.
 * `import` the index file into your project.
 * Call `I18n.changeLocale` to set the locale (which loads the right 
   translation file on demand)
 * Call `I18n.on` to react to the `'change'` event (e.g. by re-rendering)
-* Get your translators to translate all the messages.
+* Get your translators to translate all the messages :)
 
 ## Installation
 
@@ -93,7 +93,7 @@ Add a script with the command `i18nline export` to *package.json*:
 ```json
 {
   "scripts": {
-    "i18n": "i18nline export"
+    "i18n": "i18nline synch"
   }
 }
 ```
@@ -117,7 +117,7 @@ Alternatively, you can expose the raw command:
 Then pass arguments via `npm run`:
 
 ```sh
-$ npm run i18nline -- export
+$ npm run i18nline -- synch
 ```
 
 The extra dashes here are used to tell `npm run` that all arguments following 
@@ -166,8 +166,8 @@ You still need to translate the text of course!
 change the translations while your app is running and the changes will
 be picked up automatically. 
 
-## Run `i18nline export` to synch the translation files
-Using the script you created before, run `i18nline export`:
+## Run `i18nline synch` to synch the translation files
+Using the script you created before, run `i18nline synch`:
 
 ```sh
 $ npm run i18n
