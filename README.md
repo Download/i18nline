@@ -47,26 +47,94 @@ i18nline will do it for you.
 
 This project is a fork of Jon Jensen's 
 [i18nline-js](https://github.com/jenseng/i18nline-js)
-that applies some long open PR, adds some logging 
-(powered by [ulog](https://npmjs.com/package/ulog)),
-a help screen for the CLI and some auto-config. 
+that attempts to simplify usage by adding:
+* Sensible defaults
+* Auto-configuration of plugins
+* Improved documentation
+* CLI `help` command shows man page for the CLI
+* CLI `index` command generates an *index.js* file you can import
+* CLI `synch` command synchs all internationalization files
+Basically Jon did all the hard work and this project is just adding lots 
+of sugar to make it sweeter.
+
+## Project setup
+`i18nline` preprocesses your source files, generating new source files and
+translation files based on what it finds. To setup a project you need to:
+* Install `i18nline` (see next section).
+* Create a `script` in *package.json* to run the command-line tool.
+* Import `I18n` and use `I18n.t()` to render internationalized text.
+* Create an empty file in the `out` folder (by default: `'src/i18n'`) named 
+  `'[locale].json'` for each locale you want to support.
+* Run `i18nline export` to synch the translation files and index file.
+* `import` the index file into your project.
+* Call `I18n.changeLocale` to set the locale (which loads the right 
+  translation file on demand)
+* Call `I18n.on` to react to the `'change'` event (e.g. by re-rendering)
+* Get your translators to translate all the messages.
 
 ## Installation
 
 ```sh
-npm install --save-dev i18nline
+npm install --save i18nline
 ```
 
-i18nline has a dependency on i18n-js, so it will be installed automatically. i18nline adds some
-extensions to the i18n-js runtime. If you require i18n-js via i18nline, these will be added 
-automatically for you:
+i18nline has a dependency on i18n-js, so it will be installed automatically. 
+
+## Create a `script` to run the command-line tool
+`i18nline` comes with a command-line tool. This tool is written in Javascript
+and can be executed by Node JS. All you need to do to be able to use it is
+expose it via a `script` in your *package.json* (recommended), or install 
+`i18nline` globally using the `-g` flag for `npm install`. The recommended
+approach is via a `script` in *package.json* because this means you only need
+to install `i18nline` as a normal dependency of your project.
+
+Add a script with the command `i18nline export` to *package.json*:
+
+```json
+{
+  "scripts": {
+    "i18n": "i18nline export"
+  }
+}
+```
+
+You can now invoke this command using `npm run`:
+
+```sh
+$ npm run i18n
+```
+
+Alternatively, you can expose the raw command: 
+
+```json
+{
+  "scripts": {
+    "i18nline": "i18nline"
+  }
+}
+```
+
+Then pass arguments via `npm run`:
+
+```sh
+$ npm run i18nline -- export
+```
+
+The extra dashes here are used to tell `npm run` that all arguments following 
+the dashes should be passed on to the script.
+
+## Import `I18n` and use `I18n.t()` to render internationalized text.
+
+i18nline adds some extensions to the i18n-js runtime. If you require i18n-js 
+via i18nline, these will be added automatically for you:
 
 ```js
-var I18n = require('i18nline/lib/i18n');
+var I18n = require('i18nline');
 // Ready to rock!
 ```
 
-Alternatively, you can add i18n to your app any way you like and apply the extensions manually:
+Alternatively, you can add i18n to your app any way you like and apply the 
+extensions manually:
 
 ```js
 var I18n = // get it from somewhere... script tag or whatever
@@ -74,10 +142,112 @@ var I18n = // get it from somewhere... script tag or whatever
 require('i18nline/lib/extensions/i18n_js')(I18n);
 ```
 
-Every file that needs to translate stuff needs to get access to the `I18n` object somehow. 
-You can either add a require call to every such file, or use `I18n` from the global sope. 
-The choice is yours.
+Every file that needs to translate stuff needs to get access to the `I18n` 
+object somehow. You can add a require call to every such file (recommended), 
+use `I18n` from the global sope, use some Webpack loader to add the import 
+or whatever. The choice is yours.
 
+Once `I18n` is available, you can use its `I18n.t()` function to render
+internationalized text:
+
+```js
+console.info(I18n.t('This text will be internationalized'));
+```
+
+> i18nline will preprocess your source, extracting all calls to `I18n.t`. For this
+reason, you should not rename the `I18n` object, or alias the method etc.
+
+## Create an empty file for each locale
+Adding support for a locale is as simple as adding an empty file
+named `'[locale].json'` to the `out` folder and running `i18nline synch`.
+You still need to translate the text of course! 
+
+> If you use Webpack with Hot Module Replacement (HMR) enabled, you can
+change the translations while your app is running and the changes will
+be picked up automatically. 
+
+## Run `i18nline export` to synch the translation files
+Using the script you created before, run `i18nline export`:
+
+```sh
+$ npm run i18n
+```
+
+This will create/synch a bunch of files in the `out` folder:
+* `default.json`: Contains the default translations extracted from the source code
+* `en.json`: Contains the messages for the default locale (assuming that is `'en'`)
+* `de.json`: Assuming you added an empty file `de.json`, it will be synched by `i18nline`.
+* `index.js`: Index file that you can import into your project.
+
+> The files `default.json` and `index.js` are regenerated every time, so don't change
+them as your changes will get lost. The translation files for the different locales
+are synched in a smart way, so any changes there will be respected.
+
+## `import` the index file into your project.
+Since version 2, `i18nline` features an `index` command (which is also run 
+as part of the `synch` command) that generates an index file containing the 
+Javascript code needed to load the translation files into your project. 
+
+The generated file uses dynamic `import()` statements to allow Webpack and 
+other bundlers to perform code splitting, making sure that each translation 
+file ends up in a separate Javascript bundle. Also, it adds support for 
+Webpacks Hot Module Replacement.
+
+> You need to use a transpiler like [Babel](https://babeljs.io/) in 
+combination with a bundler like [Webpack](https://webpack.js.org/) to 
+take advantage of the code splitting and hot reloading features that the 
+generated index file uses. If your tool chain does not support ES2015+ with 
+dynamic `import()`, you cannot use the generated index file and need to load 
+the translations yourself somehow. Just make sure you assign the loaded 
+translations to `I18n.translations`.
+
+To import the index file, simply `require` or `import` it:
+
+*some file in the root of src/*
+```js
+var I18n = require(`./i18n`); 
+// or
+import I18n from './i18n';
+```
+
+This will add a method `I18n.import` to the regular `I18n` object, 
+with the code in it to load the translations for the given locale. 
+If you inspect the contents of `index.js`, you will find that it 
+contains a switch statement with similar code to load each file. 
+That may seem redundant, but it is needed so that all the `import()` 
+statements are statically analyzable, allowing the bundler to 
+determine which files to include in the bundles it generates. You 
+don't actually need to call the `I18n.import()` method yourself. 
+It is called automatically when you use `I18n.changeLocale` 
+(see next section).
+
+## Call `I18n.changeLocale` to change the locale
+`i18nline` adds a method `changeLocale` to `I18n` that uses the 
+method `I18n.import` (found in the generated index file) to load the 
+translations for the locale when needed. So call `changeLocale` in 
+your code to change the locale and the translation files will be 
+loaded automatically when needed.
+
+```js
+I18n.changeLocale('de');
+```
+
+## Call `I18n.on` to react to the `'change'` event
+`i18nline` uses [uevents](https://npmjs.com/package/uevents) to turn `I18n` 
+into an event emitter. Whenever the locale or the translations for a 
+locale have changed, `i18nline` emits a `'change'` event. You can add a 
+listener for this event like so:
+
+```js
+I18n.on('change', locale => {
+  // the locale changed to the given locale, or the translations for the
+  // given locale changed. React accordingly, e.g. by re-rendering
+});
+```
+
+The docs for the [Node JS Events API](https://nodejs.org/api/events.html) 
+explain how to remove listeners and perform other bookkeeping operations 
+on event emitters.
 
 ## Features
 
@@ -100,33 +270,44 @@ the usual stuff (placeholders, etc.).
 
 #### Okay, but don't the translators need them?
 
-Sure, but *you* don't need to write them. Just run:
-
-```bash
-i18nline export
-```
-
-This extracts all default translations from your codebase and outputs them 
-to `i18n/en.json`
+Sure, but *you* don't need to write them. Just run `i18nline export` 
+to extract all default translations from your codebase and output them to 
+`src/i18n/default.json` In addition, any translation files already present
+in the `out` folder are synched: any keys no longer present in the source
+are removed and any new keys are added. Finally this outputs an index file
+named `index.js` that you can `import` in your app.
 
 ### It's okay to lose your keys
 
-Why waste time coming up with keys that are less descriptive than the default
-translation? i18nline makes keys optional, so you can just do this:
+Why waste time coming up with keys that are less descriptive than the 
+default translation? i18nline makes keys optional, so you can just do this:
 
 ```javascript
 I18n.t("My Account")
 ```
 
 i18nline will create a unique key based on the translation (e.g.
-`'my_account'`), so you don't have to. See `i18nline.inferred_key_format` for
-more information.
+`'my_account'`), so you don't have to. 
+See [inferredKeyFormat](#inferredkeyformat) for more information.
 
-This can actually be a **good thing**, because when the `en` changes, the key
-changes, which means you know you need to get it retranslated (instead of
-letting a now-inaccurate translation hang out indefinitely). Whether you want
-to show "[ missing translation ]" or the `en` value in the meantime is up to
-you.
+This can actually be a **good thing**, because when the `default` 
+translation changes, the key changes, which means you know you need 
+to get it retranslated (instead of letting a now-inaccurate 
+translation hang out indefinitely). 
+
+If you are changing the meaning of the default translation, e.g.
+by changing "Enter your username and password to log in" to 
+"Enter your e-mail address and password to log in", you should make 
+the change in the source code to force a re-translation for all 
+languages. If you are just changing the wording of the message, 
+e.g. by changing "Enter your username and password to log in" to 
+"Enter your username and password to sign in", you can make the
+change in the translation file `en.js` instead, so other languages
+are not affected. 
+
+> Never change the file `default.json`, it is intended to 
+accurately reflect the text that was extracted from the program
+source and as such it is always regenerated and not synched.
 
 ### Wrappers
 
@@ -137,9 +318,9 @@ var string = 'You can <a href="/new">lead</a> a new discussion or \
   <a href="/search">join</a> an existing one.';
 ```
 
-You might say "No, I'd use handlebars". Bear with me here, we're trying to
-make this easy for you *and* the translators :). For I18n, you might try
-something like this:
+You might say "No, I'd use handlebars". Bear with me here, we're 
+trying to make this easy for you *and* the translators :). 
+For I18n, you might try something like this:
 
 ```javascript
 var string = I18n.t('You can %{lead} a new discussion or %{join} an \
@@ -167,10 +348,10 @@ var string = I18n.t('You can <a href="%{leadUrl}">lead</a> a new \
   });
 ```
 
-This isn't much better, because now you have HTML in your translations. If you
-want to add a class to the link, you have to go update all the translations.
-A translator could accidentally break your page (or worse, cross-site script
-it).
+This isn't much better, because now you have HTML in your translations. 
+If you want to add a class to the link, you have to go update all the
+translations. A translator could accidentally break your page (or worse, 
+cross-site script it).
 
 So what do you do?
 
@@ -234,7 +415,30 @@ I18n.t({one: "1 person", other: "%{count} people"},
 
 ## Configuration
 
-In your `package.json`, create an object named `"i18n"` and 
+For most projects, no configuration should be needed. 
+The default configuration should work without changes, unless:
+
+* You have source files in a directory that is in the default 
+  `ignoreDirectories`, or in the root of your project (not recommended)
+* You have source files that don't match the default `patterns`
+* You need the output to go some place other than the default 
+  `out` folder of `'src/i18n/'`
+* You have i18nline(r) `plugins` you want to configure that are 
+  not recognized by the auto-configuration feature
+
+If you find you need to change the configuration, you can configure 
+i18nline through *package.json*, *i18nline.rc* or command line arguments.
+
+If multiple sources of configuration are present, they will be 
+applied in this order, with the last option specified overwriting
+the previous settings:
+
+* Defaults
+* package.json
+* .i18nrc file
+* CLI arguments
+
+In your *package.json*, create a key named `"i18n"` and 
 specify your project's global configuration settings there.
 
 *package.json*
@@ -258,39 +462,30 @@ of your project.
 
 You can also pass some configuration options directly to the CLI.
 
-If multiple sources of configuration are present, they will be 
-applied in this order, with the last option specified overwriting
-the previous settings:
-
-* Defaults
-* package.json
-* .i18nrc file
-* CLI arguments
-
-For most projects, no configuration should be needed. The default 
-configuration should work without changes, unless:
-
-* You have source files in a directory that is in the default `ignoreDirectories`, 
-  or in the root of your project (not recommended).
-* You have source files that don't match the default `patterns`
-* You need the output to go some place other than the default `outputFile`
-* You have i18nline(r) `plugins` that you want to configure
-
-The typical configuration you'd want for a regular project would look 
-something like this:
+For your convenience, this is the default configuration that will
+be used if you supply no custom configuration:
 
 ```json
 {
-  "outputFile": "my/translations/en.json"
+  "basePath": ".",
+  "ignoreDirectories": ["node_modules", "bower_components", ".git", "dist", "build"],
+  "patterns": ["**/*.js", "**/*.jsx"],
+  "ignorePatterns": [],
+  "out": "src/i18n",
+  "inferredKeyFormat": "underscored_crc32",
+  "underscoredKeyLength": 50,
+  "defaultLocale": "en",
 }
 ```
 
 ### Options 
 
 #### basePath
-String. Defaults to `"."`. The base path (relative to the current directory).
-`directories`, `ignoreDirectories` and `outputFile` are interpreted as being
-relative to `basePath`.
+String. Defaults to `"."`. 
+The base path (relative to the current directory). `out`, 
+`directories`, `ignoreDirectories`, `patterns`, `ignorePatterns` 
+and any ignore patterns coming from `.i18nignore` files are 
+interpreted as being relative to `basePath`.
 
 #### directories
 Array of directories, or a String containing a comma separated 
@@ -302,8 +497,8 @@ auto-configure this setting with all directories in `basePath`
 that are not excluded by `ignoreDirectories`. This mostly works
 great, but if you have source files in the root of your project,
 they won't be found this way. Set `directories` to `"."` to force
-the processing to start at the root (not recommended as it may)
-be very slow. 
+the processing to start at the root (not recommended as it may
+be very slow).
 
 #### ignoreDirectories
 Array of directories, or a String containing a comma separated 
@@ -311,20 +506,39 @@ list of directories. Defaults to `['node_modules', 'bower_components', '.git', '
 These directories will not be processed.  
 
 #### patterns
-Array of pattern strings, or a String containing a (comma separated 
-list of) pattern(s). Defaults to `["**/*.js", "**/*.jsx"]`. Only 
+Array of pattern strings, or a String containing a comma separated 
+list of pattern(s). Defaults to `["**/*.js", "**/*.jsx"]`. Only 
 files matching these patterns will be processed.  
 
 > Note that for your convenience, the defaults include .jsx files
 
 #### ignorePatterns
-Array of pattern strings, or a String containing a (comma separated 
-list of) pattern(s). Defaults to `[]`. Files matching these patterns
+Array of pattern strings, or a String containing a comma separated 
+list of patterns. Defaults to `[]`. Files matching these patterns
 will be ignored, even if they match `patterns`. 
 
-#### outputFile 
-String. Defaults to `'i18n/en.json'`. 
-Used when exporting the translations. 
+#### out
+String. Defaults to `'src/i18n'`. 
+In case `out` ends with `'.json'`, the `export` command will export 
+the default translations to this file and the `synch` command will
+just perform an export. Otherwise, `out` is interpreted as a folder 
+to be used by the `synch` command to synch the translations and the
+file with the default translations will be named `default.json`.
+
+#### outputFile
+String. Alias for `out`. **deprecated**.
+In previous versions of `i18nline`, `outputFile` was used to 
+indicate where to export the default translations. However,
+starting with version 2, `i18nline` now supports synching the 
+entire translations folder, so `out` is preferred to be set 
+to a folder, making the name `outputFile` confusing. As long as
+your outputFile is set to some path ending in `'.json'`, your 
+old configuration will continue to work for all versions in the 
+2.x branch, but may stop working at version 3+. If you relied
+on the default, consider adopting the new default filename of
+`default.json` i.s.o. `en.json`, or explicitly set `out` to 
+`'i18n/en.json'` (the old default, not recommended). 
+When you set this option, a deprecation warning is logged.
 
 #### inferredKeyFormat
 String. Defaults to `"underscored_crc32"`. 
@@ -357,8 +571,20 @@ add this to your Jenkins/Travis tasks.**
 ### i18nline export
 
 Does an `i18nline check`, and then extracts all default translations from your
-codebase, merges them with any other translation files, and outputs them to
-`locales/generated/translations.json` (or `.js`).
+codebase. If `out` ends with `'.json'`, it then outputs just the default 
+translations to the configured file. Otherwise it assumes `out` is a folder 
+and saves the default translations in this folder in a file named `default.json`.
+It then reads all translation files present in the folder (expected to be 
+named `'[locale].json'`) and synchs them, removing keys that are no longer 
+in use and adding new keys with their value set to the default translation 
+for that key. If no translation file for the default locale (normally `'en'`)
+is found it generates one. Finally, it generates an index file names `index.js` 
+that you can `import` into your project and that takes care of (hot re-)loading 
+the individual translations when needed.
+
+Adding support for a new locale can be done by adding an empty file for that 
+locale and running `i18nline export` so it will populate the new file with all 
+default translations.
 
 ### i18nline help 
 
@@ -379,19 +605,22 @@ i18nline <command> [options]
 
 Commands
 
-check     Performs a dry-run with all checks, but does not write any files
-export    Performs a check, then writes the default translation file
-help      Prints this help screen
+check       Performs a dry-run with all checks, but does not write any files
+export      Performs a check, then exports the default translation file
+index       Generates an index file you can import in your program
+synch       Synchronizes all generated files with the source code
+help        Prints this help screen
 
 Options
 
 You can set/override all of i18nline's configuration options on the command line.
 SEE: https://github.com/download/i18nline#configuration
 In addition these extra options are available in the CLI:
--o             Alias for --outputFile (SEE config docs)
---only         Only process a single file/directory/pattern
---silent       Don't log any messages
--s             Alias for --silent
+
+-o          Alias for --out (SEE config docs)
+--only      Only process a single file/directory/pattern
+--silent    Don't log any messages
+-s          Alias for --silent
 
 Examples
 
@@ -400,11 +629,11 @@ $ i18nline check --only=src/some-file.js
 
 $ i18nline export --directory=src --patterns=**/*.js,**/*.jsx
 > Export all translations in `src` directory from .js and .jsx files
-> to default output file i18n/en.json
+> to default output file src/i18n/default.json
 
-$ i18nline export -o=translations/en.json
+$ i18nline export -o=translations
 > Export all translations in any directory but the ignored ones, from
-> .js and .jsx files to the given output file translations/en.json
+> .js and .jsx files to the given output file translations/default.json
 
 See what's happening
 
