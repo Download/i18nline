@@ -88,7 +88,7 @@ expose it via a `script` in your *package.json* (recommended), or install
 approach is via a `script` in *package.json* because this means you only need
 to install `i18nline` as a normal dependency of your project.
 
-Add a script with the command `i18nline export` to *package.json*:
+Add a script with the command `i18nline synch` to *package.json*:
 
 ```json
 {
