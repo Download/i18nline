@@ -571,20 +571,30 @@ add this to your Jenkins/Travis tasks.**
 ### i18nline export
 
 Does an `i18nline check`, and then extracts all default translations from your
-codebase. If `out` ends with `'.json'`, it then outputs just the default 
-translations to the configured file. Otherwise it assumes `out` is a folder 
-and saves the default translations in this folder in a file named `default.json`.
-It then reads all translation files present in the folder (expected to be 
-named `'[locale].json'`) and synchs them, removing keys that are no longer 
-in use and adding new keys with their value set to the default translation 
-for that key. If no translation file for the default locale (normally `'en'`)
-is found it generates one. Finally, it generates an index file names `index.js` 
-that you can `import` into your project and that takes care of (hot re-)loading 
-the individual translations when needed.
+codebase. If `out` ends with `'.json'`, it outputs the default translations to 
+the configured file. Otherwise it assumes `out` is a folder and saves the default translations in this folder in a file named `default.json`.
+
+### i18nline index
+
+### i18nline synch
+Does an `i18nline check`, and then extracts all default translations from your
+codebase. It then runs `i18nline export` to export the default translations.
+If `out` ends with `'.json'` it prints a warning and stops. Otherwise it checks
+if a translation file for the default locale (normally `'en'`) is found. If not, 
+it generates an empty file for it to be synched in the next step. Then, it reads 
+all translation files present in the folder (expected to be named `'[locale].json'`, 
+e.g. `'fr.json'`, `'de.json'`, etc.) and synchs them, removing keys that are no 
+longer in use and adding new keys with their value set to the default translation 
+for that key. Finally, it runs `i18nline index` to generate an index file named 
+`index.js` that you can `import` into your project and that takes care of 
+(hot re-)loading the individual translations when needed.
 
 Adding support for a new locale can be done by adding an empty file for that 
-locale and running `i18nline export` so it will populate the new file with all 
+locale and running `i18nline synch` so it will populate the new file with all 
 default translations.
+
+> The synch command works best when you use inferred keys with the 
+`inferredKeyFormat` set to `"underscored_crc32"` (the default).
 
 ### i18nline help 
 
