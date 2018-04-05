@@ -1,7 +1,7 @@
 { 
   "name": "i18nline",
   "description": "Keep your translations in line",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0",
   "scripts": {
     "test": "mocha \"./test/**/*_test.js\" --recursive",
     "i18nline": "node ./bin/i18nline.js"
