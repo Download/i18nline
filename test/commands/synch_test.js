@@ -1,7 +1,7 @@
 /* global describe, it */
 
 var Synch = require('../../lib/commands/synch');
-var I18nline = require('../../lib/i18nline');
+var I18nline = require('../../lib/main');
 var assert = require('chai').assert;
 var fs = require('fs');
 var path = require('path');
@@ -13,7 +13,7 @@ describe('Synch', function() {
     it("should synch all internationalization files", function() {
       var tmpDir = temp.mkdirSync();
       I18nline.set('basePath', tmpDir, function() {
-        I18nline.set('out', 'out/', function() {
+        I18nline.set('out', 'out', function() {
           var cmd = new Synch({silent: true});
           cmd.checkFiles = function() {
             this.translations = {translations: {i18n: "Iñtërnâtiônàlizætiøn"}};
