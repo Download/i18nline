@@ -1,6 +1,8 @@
 # i18nline
 ### Keep your translations in line
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Download/i18nline.svg)](https://greenkeeper.io/)
+
 [![npm](https://img.shields.io/npm/v/i18nline.svg)](https://npmjs.com/package/i18nline)
 [![license](https://img.shields.io/npm/l/i18nline.svg)](https://github.com/download/i18nline/LICENSE)
 [![travis](https://img.shields.io/travis/Download/i18nline.svg)](https://travis-ci.org/Download/i18nline)
