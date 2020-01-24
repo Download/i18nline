@@ -48,7 +48,7 @@
     "gglobby": "0.0.3",
     "i18n-js": "^3.0.3",
     "minimist": "^1.2.0",
-    "mkdirp": "^0.5.1",
+    "mkdirp": "^1.0.2",
     "speakingurl": "^14.0.1",
     "uevents": "^1.0.0",
     "ulog": "^1.1.0"
