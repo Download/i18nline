@@ -41,7 +41,7 @@
   "dependencies": {
     "babel-traverse": "^6.0.0",
     "babylon": "^6.0.0",
-    "chalk": "^2.3.2",
+    "chalk": "^4.0.0",
     "crc32": "~0.2.2",
     "esprima": "^4.0.0",
     "extend": "^3.0.1",
