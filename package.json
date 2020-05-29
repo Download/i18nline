@@ -46,7 +46,7 @@
     "esprima": "^4.0.0",
     "extend": "^3.0.1",
     "gglobby": "0.0.3",
-    "i18n-js": "^3.0.3",
+    "i18n-js": "^3.7.0",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "speakingurl": "^14.0.1",
